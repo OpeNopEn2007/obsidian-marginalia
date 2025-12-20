@@ -1,204 +1,191 @@
 # Marginalia 浮签
 
-在 Obsidian 状态栏显示格言、名言或自定义文本的插件。
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/OpeNopEn2007/obsidian-marginalia)
+![GitHub license](https://img.shields.io/github/license/OpeNopEn2007/obsidian-marginalia)
+![GitHub downloads](https://img.shields.io/github/downloads/OpeNopEn2007/obsidian-marginalia/total)
 
-## 功能特性
+> 利用屏幕边缘的微小空间，为写作者提供不期而遇的灵感。
 
-- 📝 **多种数据源**：支持一言 API 和本地自定义列表
-- 🔄 **自动刷新**：可配置自动刷新间隔（1-60分钟）
-- 🔀 **分类选择**：支持选择一言 API 的不同分类
-- 📋 **自定义列表**：支持添加和管理本地格言列表
-- 🖱️ **交互功能**：点击刷新，右键复制
-- 📱 **跨平台支持**：同时支持桌面端和移动端
+**Marginalia (浮签)** 是一款基于 Obsidian 的沉浸式状态栏插件。它利用屏幕底部的状态栏空间，通过“一言”API 或自定义语录库，展示格言、名言或灵感片段。
 
-## 安装方法
+## 目录 (Table of Contents)
 
-### 方法一：从 Obsidian 社区插件市场安装（推荐）
+- [✨ 功能特性](#-功能特性)
+- [📥 安装方法](#-安装方法)
+- [⚙️ 配置说明](#️-配置说明)
+- [🛠️ 开发说明](#️-开发说明)
+- [📅 更新日志](#-更新日志)
 
-1. 打开 Obsidian 设置
-2. 点击「社区插件」
-3. 关闭「安全模式」
-4. 点击「浏览」
-5. 搜索「Marginalia」
-6. 点击「安装」
-7. 安装完成后点击「启用」
+---
 
-### 方法二：手动安装
+## ✨ 功能特性
 
-1. 下载最新版本的插件包
-2. 解压到 Obsidian 库的 `.obsidian/plugins/` 目录下
-3. 确保插件目录名称为 `marginalia`
-4. 重启 Obsidian
-5. 在「社区插件」设置中启用插件
+- 📝 **多种数据源**：支持“一言” API (Hitokoto) 和本地自定义列表。
+- 🔄 **自动刷新**：可配置自动刷新间隔（1-60分钟），让灵感流动。
+- 🔀 **分类精选**：支持筛选动画、文学、哲学、诗词等特定类型的句子。
+- 📋 **私有语录**：支持添加和管理你自己的摘抄库。
+- 🖱️ **极简交互**：悬浮查看来源，点击立即刷新，右键一键复制。
+- 📱 **全端支持**：完美适配桌面端和移动端 UI。
 
-## 配置说明
+## 📥 安装方法
 
-### 数据源设置
+### 方法一：使用 BRAT 插件安装（推荐用于测试）
 
-- **一言 API**：从一言 API 获取随机格言
-- **本地自定义列表**：使用本地配置的格言列表
+在官方商店审核通过前，推荐使用 [BRAT](https://github.com/TfTHacker/obsidian42-brat) 插件安装：
 
-### 一言分类
+1. 在 Obsidian 社区插件市场搜索并安装 **BRAT**。
+2. 打开 BRAT 设置，点击 `Add Beta plugin`。
+3. 输入本仓库地址：`https://github.com/OpeNopEn2007/obsidian-marginalia`
+4. 点击 `Add Plugin` 即可。
 
-可选择以下分类：
+### 方法二：从 Obsidian 社区插件市场安装
 
-| 分类代码 | 分类名称 |
-| -------- | -------- |
-| a        | 动画     |
-| b        | 漫画     |
-| c        | 游戏     |
-| d        | 文学     |
-| e        | 原创     |
-| f        | 网络     |
-| g        | 其他     |
-| h        | 影视     |
-| i        | 诗词     |
-| j        | 网易云   |
-| k        | 哲学     |
-| l        | 抖机灵   |
+*(注：插件目前正在官方审核流程中，上架后可直接搜索安装)*
 
-### 自定义格言格式
+1. 打开 Obsidian 设置 -> **社区插件**。
+2. 关闭「安全模式」。
+3. 点击「浏览」，搜索 `Marginalia`。
+4. 点击安装并启用。
 
-一行一条格言，支持以下格式：
+### 方法三：手动安装
 
+1. 在 GitHub Releases 页面下载最新的 `main.js`, `manifest.json`, `styles.css`。
+2. 将文件放入 `.obsidian/plugins/marginalia/` 文件夹中。
+3. 重启 Obsidian 并启用插件。
+
+## ⚙️ 配置说明
+
+### 1. 数据源设置
+
+- **一言 API**：联网获取随机格言。
+- **本地自定义列表**：仅展示本地配置的内容，离线可用。
+
+### 2. 一言分类对照表
+
+|    代码    | 分类 |    代码    | 分类 |    代码    | 分类   |
+| :---------: | :--- | :---------: | :--- | :---------: | :----- |
+| **a** | 动画 | **e** | 原创 | **i** | 诗词   |
+| **b** | 漫画 | **f** | 网络 | **j** | 网易云 |
+| **c** | 游戏 | **g** | 其他 | **k** | 哲学   |
+| **d** | 文学 | **h** | 影视 | **l** | 抖机灵 |
+
+### 3. 自定义格言格式
+
+支持纯文本或带来源的文本，一行一条：
+
+```text
+这里是格言内容
+这里是格言内容 | 这里是来源作者
 ```
-内容
-内容 | 来源
-```
 
-示例：
+## 🛠️ 开发说明
 
-```
-人生得意须尽欢，莫使金樽空对月。
-天生我材必有用，千金散尽还复来。 | 李白《将进酒》
-```
+如果你是开发者，或者想自己修改源码，请参考以下流程。
 
-### 刷新设置
-
-- **自动刷新**：开启或关闭自动刷新功能
-- **刷新间隔**：设置自动刷新的时间间隔（1-60分钟）
-
-## 使用说明
-
-1. **查看格言**：状态栏会显示当前格言
-2. **手动刷新**：点击状态栏格言即可刷新
-3. **复制格言**：右键点击状态栏格言可复制到剪贴板
-4. **修改配置**：在 Obsidian 设置中找到「Marginalia 浮签设置」进行配置
-
-## 开发说明
-
-### 环境要求
+**环境要求**
 
 - Node.js 16+
+
 - npm 或 yarn
 
-### 开发命令
+**快速开始**
 
-```bash
-# 安装依赖
+1. **克隆仓库并安装依赖：**
+```Bash
+git clone [https://github.com/OpeNopEn2007/obsidian-marginalia.git](https://github.com/OpeNopEn2007/obsidian-marginalia.git)
+cd obsidian-marginalia
 npm install
+```
 
-# 开发模式（自动编译）
+2. **配置自动部署环境 (可选)：** 本项目支持在开发时自动将构建好的插件同步到你的 Obsidian 测试库。
+
+- 复制根目录下的 `.env.example` 文件，重命名为 `.env`。
+
+- 修改 `.env` 文件中的 `OBSIDIAN_VAULT_PATH` 为你本地 Obsidian 插件目录的绝对路径。
+```
+# .env 示例
+OBSIDIAN_VAULT_PATH=D:\Vault\MyTestVault\.obsidian\plugins\marginalia
+```
+- *注意：`.env` 文件已被 git 忽略，你的路径隐私不会被上传。*
+
+3. 启动开发模式：
+```Bash
+
 npm run dev
+```
+此时修改代码，插件会自动重新编译（并同步到你的测试库），在 Obsidian 中通过命令 `Reload app without saving` 即可看到效果。
 
-# 构建生产版本
+4. 构建生产版本：
+```Bash
 npm run build
 ```
+构建产物将输出至 `./marginalia` 目录。
 
-### 构建流程
+**项目结构**
+```Plaintext
 
-构建脚本会自动执行以下操作：
-
-- 将编译后的 `main.js` 输出到 `./marginalia/main.js`
-- 自动复制 `manifest.json` 和 `styles.css` 到 `./marginalia/` 文件夹
-- 自动删除根目录下的 `main.js`
-
-### 开发环境配置
-
-首次运行构建脚本前，需要确保 PowerShell 执行策略已正确配置：
-
-```powershell
-Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
-
-### 项目结构
-
-```
 Marginalia/
 ├── src/
-│   ├── services/          # 服务层
-│   │   ├── hitokoto.ts    # 一言 API 服务
-│   │   ├── quoteManager.ts # 格言管理服务
-│   │   └── statusBar.ts   # 状态栏组件
-│   ├── main.ts            # 插件主类
-│   └── settings.ts        # 设置和配置
-├── marginalia/            # 构建输出目录
-│   ├── main.js            # 编译后的入口文件
-│   ├── manifest.json      # 插件清单
-│   └── styles.css         # 插件样式
-├── manifest.json          # 源代码清单
-├── styles.css             # 源代码样式
-├── package.json           # 项目配置
-└── esbuild.config.mjs     # 构建脚本
+│   ├── services/          # 核心业务逻辑
+│   │   ├── hitokoto.ts    # API 请求处理
+│   │   └── statusBar.ts   # 状态栏 UI 组件
+│   ├── main.ts            # 插件入口
+│   └── settings.ts        # 设置面板逻辑
+├── esbuild.config.mjs     # 构建配置 (含自动部署逻辑)
+├── .env.example           # 环境变量范例
+└── manifest.json          # 插件清单文件
 ```
 
-## 许可证
+## 📜 许可证
+MIT License. Copyright (c) 2025 OpeNopEn2007.
 
-MIT License
+## 🤝 贡献与联系
+欢迎提交 Issue 反馈 Bug，或提交 Pull Request 贡献代码！
 
-## 贡献
+- **作者：**OpeNopEn
 
-欢迎提交 Issue 和 Pull Request！
+- **GitHub：**[OpeNopEn2007](https://github.com/OpeNopEn2007)
 
-## 联系方式
+***
 
-作者：OpeNopEn2007
+## 📅 更新日志
 
-GitHub：https://github.com/OpeNopEn2007
+**v1.0.0.4**
+- ✨ **新特性：**实现了全新的悬浮式气泡提示 (Tooltip)，包含平滑的淡入淡出动画。
 
-## 更新日志
+- 🎨**UI 优化：**将状态栏 Emoji 替换为 Obsidian 原生 Lucide 图标，视觉更统一。
 
-### v1.0.0.4
+- 🐛 **修复：**修复了 Hitokoto API 请求参数格式错误。
 
-- UI Refinement & Bug Fix
-- 实现了悬浮式气泡提示：将Tooltip从嵌入式改为悬浮式，位于状态栏文字正上方
-- 优化了Tooltip样式：采用深黑色圆角矩形背景，白色文字，底部带有指向状态栏的小三角箭头
-- 实现了平滑的悬停动画：添加了0.2秒的淡入淡出和上浮动画
-- 使用Obsidian原生CSS变量：确保Tooltip样式适应深色/浅色主题
-- 修复了Tooltip定位问题：使用!important确保覆盖默认布局，解决了挤压状态栏空间的问题
-- 修复了Hitokoto API请求错误：将逗号分隔的分类参数格式改为符合API规范的重复键名格式
-- 修复了设置面板中"自定义列表"输入导致的消息刷屏问题，实现了1000ms防抖优化
-- 完善了手动刷新格言的交互体验：添加了刷新成功提示
-- 将状态栏中的 Emoji 替换为 Obsidian 原生的 Lucide 图标，提升 UI 精致度
-- 重构了 statusBar.ts 中的 DOM 结构，实现了图标和文字的正确对齐和显示
+- ⚡ **性能：**为设置面板的输入框添加了防抖 (Debounce) 处理，避免频繁刷新。
 
-### v1.0.0.3
+**v1.0.0.3**
+- 🔧 **工程化：**重构构建脚本，支持自动分发文件到指定目录。
 
-- 构建与部署优化
-- 修改了 esbuild.config.mjs，实现编译后自动将插件同步到 Obsidian 插件目录
-- 实现了自动复制 main.js, manifest.json, styles.css 到指定 Obsidian 插件目录
-- 添加了构建成功后的控制台反馈
-- 支持目标文件夹自动创建
-- API修复与优化：使用URLSearchParams处理API请求参数，确保符合RESTful API规范
+- 🌐 **网络：**优化 URL 参数构建逻辑，符合 RESTful 规范。
 
-### v1.0.0.2
+**v1.0.0.2**
+- ⚡ **算法优化：**修复了随机重复逻辑，确保不会连续两次返回同一条格言。
 
-- 算法优化与UI净化
-- 净化了UI提示文本：移除了提示信息中的Emoji，只保留纯文字
-- 修复了随机重复逻辑：确保不会连续两次返回同一条格言
-- 针对API的额外防护：如果新获取的内容与当前显示的内容完全一致，则重试一次
+- 🛡️ **防护机制：**针对 API 添加额外防护，如果内容重复则自动重试。
 
-### v1.0.0.1
+- 🎨 **UI 净化：**移除了提示信息中的 Emoji，回归纯文字的极简风格。
 
-- UI Refinement
-- 优化了状态栏悬浮提示逻辑：简化悬浮提示信息，只显示来源属性
-- 修改了构建脚本，实现了自动化分发文件夹构建流程
-- 更新了作者信息：正式署名为 Open Open
+**v1.0.0.1**
+- 💄 **UI Refinement：**优化状态栏悬浮提示逻辑，只显示来源属性。
 
-### v1.0.0
+**v1.0.0.0**
+- 🔨 **构建优化：**修改构建脚本，实现自动化分发文件夹构建流程。
 
-- 初始版本
-- 支持一言 API 和本地自定义列表
-- 支持自动刷新和手动刷新
-- 支持点击刷新和右键复制功能
-- 支持多种一言分类选择
+- 📝 **文档：**更新作者信息，正式署名为 Open Open。
+
+**v1.0.0**
+- 🎉 **初始版本发布。**
+
+- 支持一言 API 和本地自定义列表。
+
+- 支持自动刷新（1-60分钟）和点击手动刷新。
+
+- 支持右键复制功能。
+
+- 支持多种一言分类选择。

@@ -1,17 +1,23 @@
 {
   "name": "marginalia",
-  "version": "1.0.0",
+  "version": "1.0.0.4",
   "description": "Obsidian plugin for displaying quotes in status bar",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",
     "build": "node esbuild.config.mjs production"
   },
-  "keywords": ["obsidian", "plugin", "quotes", "statusbar"],
-  "author": "Your Name",
+  "keywords": [
+    "obsidian",
+    "plugin",
+    "quotes",
+    "statusbar"
+  ],
+  "author": "OpeNopEn2007",
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^16.0.0",
+    "dotenv": "^17.2.3",
     "esbuild": "^0.14.0",
     "obsidian": "^0.14.0",
     "typescript": "^4.5.0"

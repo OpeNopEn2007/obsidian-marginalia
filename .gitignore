@@ -8,6 +8,7 @@ marginalia/
 .trae/
 .vscode/
 .idea/
+.obsidian/
 *.swp
 *.swo
 *~
@@ -23,6 +24,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+DEV_LOG.md
 
 # Environment variables
 .env
