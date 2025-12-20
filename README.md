@@ -35,15 +35,15 @@
 
 * 本地自定义列表模式
 
-![local_mode_demo](.\asset\local_mode_demo.gif "本地自定义列表模式")
+![local_mode_demo](asset/local_mode_demo.gif)
 
 * 「一言」API模式
 
-![online_mode_demo](.\asset\online_mode_demo.gif "「一言」API模式")
+![online_mode_demo](asset/online_mode_demo.gif)
 
 * 右键点击即可复制
 
-![copy_demo](https://file+.vscode-resource.vscode-cdn.net/d%3A/Vault/PluginsVault/Marginalia/asset/copy_demo.gif)
+![copy_demo](asset/copy_demo.gif)
 
 ## 📥 安装方法
 
