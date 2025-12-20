@@ -43,19 +43,19 @@
 可选择以下分类：
 
 | 分类代码 | 分类名称 |
-|---------|---------|
-| a       | 动画     |
-| b       | 漫画     |
-| c       | 游戏     |
-| d       | 文学     |
-| e       | 原创     |
-| f       | 网络     |
-| g       | 其他     |
-| h       | 影视     |
-| i       | 诗词     |
-| j       | 网易云   |
-| k       | 哲学     |
-| l       | 抖机灵   |
+| -------- | -------- |
+| a        | 动画     |
+| b        | 漫画     |
+| c        | 游戏     |
+| d        | 文学     |
+| e        | 原创     |
+| f        | 网络     |
+| g        | 其他     |
+| h        | 影视     |
+| i        | 诗词     |
+| j        | 网易云   |
+| k        | 哲学     |
+| l        | 抖机灵   |
 
 ### 自定义格言格式
 
@@ -67,6 +67,7 @@
 ```
 
 示例：
+
 ```
 人生得意须尽欢，莫使金樽空对月。
 天生我材必有用，千金散尽还复来。 | 李白《将进酒》
@@ -107,6 +108,7 @@ npm run build
 ### 构建流程
 
 构建脚本会自动执行以下操作：
+
 - 将编译后的 `main.js` 输出到 `./marginalia/main.js`
 - 自动复制 `manifest.json` 和 `styles.css` 到 `./marginalia/` 文件夹
 - 自动删除根目录下的 `main.js`
@@ -150,13 +152,14 @@ MIT License
 
 ## 联系方式
 
-作者：Open Open
+作者：OpeNopEn2007
 
-GitHub：https://github.com/openopen
+GitHub：https://github.com/OpeNopEn2007
 
 ## 更新日志
 
 ### v1.0.0.4
+
 - UI Refinement & Bug Fix
 - 实现了悬浮式气泡提示：将Tooltip从嵌入式改为悬浮式，位于状态栏文字正上方
 - 优化了Tooltip样式：采用深黑色圆角矩形背景，白色文字，底部带有指向状态栏的小三角箭头
@@ -170,6 +173,7 @@ GitHub：https://github.com/openopen
 - 重构了 statusBar.ts 中的 DOM 结构，实现了图标和文字的正确对齐和显示
 
 ### v1.0.0.3
+
 - 构建与部署优化
 - 修改了 esbuild.config.mjs，实现编译后自动将插件同步到 Obsidian 插件目录
 - 实现了自动复制 main.js, manifest.json, styles.css 到指定 Obsidian 插件目录
@@ -178,18 +182,21 @@ GitHub：https://github.com/openopen
 - API修复与优化：使用URLSearchParams处理API请求参数，确保符合RESTful API规范
 
 ### v1.0.0.2
+
 - 算法优化与UI净化
 - 净化了UI提示文本：移除了提示信息中的Emoji，只保留纯文字
 - 修复了随机重复逻辑：确保不会连续两次返回同一条格言
 - 针对API的额外防护：如果新获取的内容与当前显示的内容完全一致，则重试一次
 
 ### v1.0.0.1
+
 - UI Refinement
 - 优化了状态栏悬浮提示逻辑：简化悬浮提示信息，只显示来源属性
 - 修改了构建脚本，实现了自动化分发文件夹构建流程
 - 更新了作者信息：正式署名为 Open Open
 
 ### v1.0.0
+
 - 初始版本
 - 支持一言 API 和本地自定义列表
 - 支持自动刷新和手动刷新

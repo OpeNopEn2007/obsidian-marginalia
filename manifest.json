@@ -1,11 +1,11 @@
 {
   "id": "marginalia",
   "name": "Marginalia",
-  "version": "1.0.0.3",
+  "version": "1.0.0.4",
   "minAppVersion": "0.12.0",
   "description": "在状态栏显示格言、名言或自定义文本",
-  "author": "Open Open",
-  "authorUrl": "https://github.com/yourusername",
+  "author": "OpeNopEn2007",
+  "authorUrl": "https://github.com/OpeNopEn2007",
   "isDesktopOnly": false,
   "main": "main.js"
 }
