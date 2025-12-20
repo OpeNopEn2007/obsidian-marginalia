@@ -1,14 +1,15 @@
-import { Plugin } from 'obsidian';
+import { Plugin, Notice } from 'obsidian';
+// Test auto sync functionality
 import { MarginaliaSettings, DEFAULT_SETTINGS, MarginaliaSettingTab } from './settings';
 import { HitokotoService, Quote } from './services/hitokoto';
 import { QuoteManager } from './services/quoteManager';
 import { StatusBarComponent } from './ui/statusBar';
 
 export default class MarginaliaPlugin extends Plugin {
-  public settings: MarginaliaSettings;
-  private hitokotoService: HitokotoService;
-  private quoteManager: QuoteManager;
-  private statusBarComponent: StatusBarComponent;
+  public settings!: MarginaliaSettings;
+  private hitokotoService!: HitokotoService;
+  private quoteManager!: QuoteManager;
+  private statusBarComponent!: StatusBarComponent;
   private refreshTimer: number | null = null;
 
   async onload() {
@@ -63,6 +64,12 @@ export default class MarginaliaPlugin extends Plugin {
       if (this.settings.dataSource === 'hitokoto') {
         // 从一言API获取
         quote = await this.hitokotoService.getRandomQuote(this.settings.hitokotoCategories);
+        
+        // 检查是否与当前显示的内容相同，如果相同则重试一次
+        const currentQuote = this.statusBarComponent.getCurrentQuote();
+        if (currentQuote && quote.content === currentQuote.content) {
+          quote = await this.hitokotoService.getRandomQuote(this.settings.hitokotoCategories);
+        }
       } else {
         // 从本地自定义列表获取
         const randomQuote = this.quoteManager.getRandomQuote();
@@ -79,6 +86,8 @@ export default class MarginaliaPlugin extends Plugin {
 
       // 更新状态栏显示
       this.statusBarComponent.updateQuote(quote);
+      // 显示刷新成功提示
+      new Notice('格言已刷新');
     } catch (error) {
       console.error('Failed to refresh quote:', error);
       // 显示错误提示
@@ -89,7 +98,7 @@ export default class MarginaliaPlugin extends Plugin {
     }
   }
 
-  private updateRefreshTimer() {
+  public updateRefreshTimer() {
     // 清除现有定时器
     this.clearRefreshTimer();
 

@@ -1,8 +1,10 @@
-import { Plugin, Platform } from 'obsidian';
+import { Plugin, Platform, setIcon } from 'obsidian';
 import { Quote } from '../services/hitokoto';
 
 export class StatusBarComponent {
     private statusBarItem: HTMLElement;
+    private textEl: HTMLElement;
+    private tooltipEl: HTMLElement;
     private currentQuote: Quote | null = null;
     private onClickCallback: () => void;
 
@@ -11,8 +13,19 @@ export class StatusBarComponent {
         this.statusBarItem.style.textAlign = 'center';
         this.onClickCallback = onClickCallback;
 
-        
-        this.statusBarItem.title = '点击刷新格言，右键复制';
+        // 添加自定义类，设置为相对定位
+        this.statusBarItem.addClass("marginalia-status-item");
+
+        // 创建气泡元素：默认隐藏
+        this.tooltipEl = this.statusBarItem.createDiv({ cls: "marginalia-tooltip" });
+
+        // 创建图标容器
+        const iconEl = this.statusBarItem.createSpan({ cls: "marginalia-icon" });
+        // 设置图标
+        setIcon(iconEl, "quote-glyph");
+
+        // 创建文字容器并保存引用
+        this.textEl = this.statusBarItem.createSpan({ cls: "marginalia-text" });
 
         // 绑定事件
         this.bindEvents();
@@ -37,10 +50,10 @@ export class StatusBarComponent {
         this.currentQuote = quote;
 
         // 更新状态栏显示
-        this.statusBarItem.textContent = `💡 ${quote.content}`;
+        this.textEl.textContent = quote.content;
 
-        // 更新悬浮提示，只显示来源
-        this.statusBarItem.title = `from ${quote.source || 'Unknown'}`;
+        // 更新自定义气泡提示内容
+        this.tooltipEl.setText(quote.source ? `from ${quote.source}` : "from Unknown");
     }
 
     private async copyQuoteToClipboard(): Promise<void> {
@@ -77,27 +90,26 @@ export class StatusBarComponent {
 
     private showTemporaryMessage(message: string): void {
     // 保存当前的文本和提示
-    const originalText = this.statusBarItem.textContent || '';
-    const originalTooltip = this.statusBarItem.title;
+    const originalText = this.textEl.textContent || '';
     
     // 显示临时消息
-    this.statusBarItem.textContent = `✓ ${message}`;
-    this.statusBarItem.title = message;
+    this.textEl.textContent = `✓ ${message}`;
+    this.tooltipEl.setText(message);
     
     // 2秒后恢复原状
     setTimeout(() => {
       if (this.currentQuote) {
         this.updateQuote(this.currentQuote);
       } else {
-        this.statusBarItem.textContent = originalText;
-        this.statusBarItem.title = originalTooltip;
+        this.textEl.textContent = originalText;
+        this.tooltipEl.setText('');
       }
     }, 2000);
   }
 
   clear(): void {
-    this.statusBarItem.textContent = '';
-    this.statusBarItem.title = '';
+    this.textEl.textContent = '';
+    this.tooltipEl.setText('');
     this.currentQuote = null;
   }
 

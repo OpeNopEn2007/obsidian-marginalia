@@ -104,6 +104,21 @@ npm run dev
 npm run build
 ```
 
+### 构建流程
+
+构建脚本会自动执行以下操作：
+- 将编译后的 `main.js` 输出到 `./marginalia/main.js`
+- 自动复制 `manifest.json` 和 `styles.css` 到 `./marginalia/` 文件夹
+- 自动删除根目录下的 `main.js`
+
+### 开发环境配置
+
+首次运行构建脚本前，需要确保 PowerShell 执行策略已正确配置：
+
+```powershell
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
 ### 项目结构
 
 ```
@@ -111,15 +126,18 @@ Marginalia/
 ├── src/
 │   ├── services/          # 服务层
 │   │   ├── hitokoto.ts    # 一言 API 服务
-│   │   └── quoteManager.ts # 格言管理服务
-│   ├── ui/                # UI 组件
+│   │   ├── quoteManager.ts # 格言管理服务
 │   │   └── statusBar.ts   # 状态栏组件
 │   ├── main.ts            # 插件主类
 │   └── settings.ts        # 设置和配置
-├── main.js                # 编译后的入口文件
-├── manifest.json          # 插件清单
-├── styles.css             # 插件样式
-└── package.json           # 项目配置
+├── marginalia/            # 构建输出目录
+│   ├── main.js            # 编译后的入口文件
+│   ├── manifest.json      # 插件清单
+│   └── styles.css         # 插件样式
+├── manifest.json          # 源代码清单
+├── styles.css             # 源代码样式
+├── package.json           # 项目配置
+└── esbuild.config.mjs     # 构建脚本
 ```
 
 ## 许可证
@@ -132,11 +150,44 @@ MIT License
 
 ## 联系方式
 
-作者：Your Name
+作者：Open Open
 
-GitHub：https://github.com/yourusername
+GitHub：https://github.com/openopen
 
 ## 更新日志
+
+### v1.0.0.4
+- UI Refinement & Bug Fix
+- 实现了悬浮式气泡提示：将Tooltip从嵌入式改为悬浮式，位于状态栏文字正上方
+- 优化了Tooltip样式：采用深黑色圆角矩形背景，白色文字，底部带有指向状态栏的小三角箭头
+- 实现了平滑的悬停动画：添加了0.2秒的淡入淡出和上浮动画
+- 使用Obsidian原生CSS变量：确保Tooltip样式适应深色/浅色主题
+- 修复了Tooltip定位问题：使用!important确保覆盖默认布局，解决了挤压状态栏空间的问题
+- 修复了Hitokoto API请求错误：将逗号分隔的分类参数格式改为符合API规范的重复键名格式
+- 修复了设置面板中"自定义列表"输入导致的消息刷屏问题，实现了1000ms防抖优化
+- 完善了手动刷新格言的交互体验：添加了刷新成功提示
+- 将状态栏中的 Emoji 替换为 Obsidian 原生的 Lucide 图标，提升 UI 精致度
+- 重构了 statusBar.ts 中的 DOM 结构，实现了图标和文字的正确对齐和显示
+
+### v1.0.0.3
+- 构建与部署优化
+- 修改了 esbuild.config.mjs，实现编译后自动将插件同步到 Obsidian 插件目录
+- 实现了自动复制 main.js, manifest.json, styles.css 到指定 Obsidian 插件目录
+- 添加了构建成功后的控制台反馈
+- 支持目标文件夹自动创建
+- API修复与优化：使用URLSearchParams处理API请求参数，确保符合RESTful API规范
+
+### v1.0.0.2
+- 算法优化与UI净化
+- 净化了UI提示文本：移除了提示信息中的Emoji，只保留纯文字
+- 修复了随机重复逻辑：确保不会连续两次返回同一条格言
+- 针对API的额外防护：如果新获取的内容与当前显示的内容完全一致，则重试一次
+
+### v1.0.0.1
+- UI Refinement
+- 优化了状态栏悬浮提示逻辑：简化悬浮提示信息，只显示来源属性
+- 修改了构建脚本，实现了自动化分发文件夹构建流程
+- 更新了作者信息：正式署名为 Open Open
 
 ### v1.0.0
 - 初始版本

@@ -14,25 +14,28 @@ export interface Quote {
   type?: string;
 }
 
+import { request } from 'obsidian';
+
 export class HitokotoService {
   private readonly API_URL = 'https://v1.hitokoto.cn/';
 
   async getRandomQuote(categories?: string[]): Promise<Quote> {
     try {
-      let url = this.API_URL;
-      
+      // 必须使用 URLSearchParams 来正确处理重复参数
+      const url = new URL(this.API_URL);
       if (categories && categories.length > 0) {
-        const c = categories.join(',');
-        url = `${this.API_URL}?c=${c}`;
+          categories.forEach(category => {
+              url.searchParams.append("c", category);
+              // 关键点：append 会生成 ?c=a&c=b 而不是 ?c=a,b
+          });
       }
-
-      const response = await fetch(url);
       
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      const response = await request({
+        url: url.toString(),
+        method: 'GET'
+      });
 
-      const data: HitokotoResponse = await response.json();
+      const data: HitokotoResponse = JSON.parse(response);
       
       return {
         content: data.hitokoto,

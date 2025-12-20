@@ -1,7 +1,7 @@
 {
   "id": "marginalia",
   "name": "Marginalia",
-  "version": "1.0.0",
+  "version": "1.0.0.3",
   "minAppVersion": "0.12.0",
   "description": "在状态栏显示格言、名言或自定义文本",
   "author": "Open Open",

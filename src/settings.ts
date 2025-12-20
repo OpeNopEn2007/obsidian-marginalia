@@ -19,6 +19,7 @@ export const DEFAULT_SETTINGS: MarginaliaSettings = {
 
 export class MarginaliaSettingTab extends PluginSettingTab {
   private plugin: MarginaliaPlugin;
+  private debounceTimer: NodeJS.Timeout | null = null;
 
   constructor(app: App, plugin: MarginaliaPlugin) {
     super(app, plugin);
@@ -119,9 +120,15 @@ export class MarginaliaSettingTab extends PluginSettingTab {
           textarea
             .setValue(this.plugin.settings.customQuotes)
             .onChange(async (value) => {
-              this.plugin.settings.customQuotes = value;
-              await this.plugin.saveSettings();
-              this.plugin.refreshQuote();
+              // 清除旧的定时器
+              if (this.debounceTimer) clearTimeout(this.debounceTimer);
+              
+              // 设置新的定时器，延迟 1000ms
+              this.debounceTimer = setTimeout(async () => {
+                this.plugin.settings.customQuotes = value;
+                await this.plugin.saveSettings();
+                this.plugin.refreshQuote();
+              }, 1000);
             });
           textarea.inputEl.style.width = '100%';
           textarea.inputEl.style.height = '200px';

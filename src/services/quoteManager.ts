@@ -2,6 +2,7 @@ import { Quote } from './hitokoto';
 
 export class QuoteManager {
   private quotes: Quote[] = [];
+  private lastIndex: number = -1;
 
   constructor(quotesString: string = '') {
     this.loadQuotes(quotesString);
@@ -38,12 +39,23 @@ export class QuoteManager {
   }
 
   getRandomQuote(): Quote | null {
-    if (this.quotes.length === 0) {
+    const count = this.quotes.length;
+    
+    if (count === 0) {
       return null;
     }
-
-    const randomIndex = Math.floor(Math.random() * this.quotes.length);
-    return this.quotes[randomIndex];
+    
+    if (count === 1) {
+      return this.quotes[0];
+    }
+    
+    let newIndex;
+    do {
+      newIndex = Math.floor(Math.random() * count);
+    } while (newIndex === this.lastIndex);
+    
+    this.lastIndex = newIndex;
+    return this.quotes[newIndex];
   }
 
   getQuoteCount(): number {
