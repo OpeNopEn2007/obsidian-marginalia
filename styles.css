@@ -1,0 +1,75 @@
+/* Marginalia 浮签插件样式 */
+
+/* 分类选择区域 */
+.marginalia-categories-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+/* 分类项 */
+.marginalia-category-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: var(--background-secondary);
+  transition: background-color 0.2s ease;
+}
+
+.marginalia-category-item:hover {
+  background-color: var(--background-primary-alt);
+}
+
+/* 分类名称 */
+.marginalia-category-name {
+  font-size: 14px;
+  color: var(--text-primary);
+  margin-left: 8px;
+}
+
+/* 状态栏项样式 */
+.marginalia-status-bar-item {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.marginalia-status-bar-item:hover {
+  opacity: 0.8;
+}
+
+/* 确保设置面板中的文本区域样式一致 */
+.marginalia-settings textarea {
+  font-family: var(--font-monospace);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--background-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 8px;
+  resize: vertical;
+}
+
+.marginalia-settings textarea:focus {
+  outline: none;
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 1px var(--interactive-accent);
+}
+
+/* 适配移动端 */
+@media (max-width: 768px) {
+  .marginalia-categories-container {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+
+  .marginalia-category-item {
+    padding: 3px 6px;
+  }
+
+  .marginalia-category-name {
+    font-size: 13px;
+  }
+}
