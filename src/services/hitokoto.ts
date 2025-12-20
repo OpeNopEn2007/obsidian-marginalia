@@ -44,7 +44,12 @@ export class HitokotoService {
       };
     } catch (error) {
       console.error('Failed to fetch hitokoto:', error);
-      throw error;
+      // 返回默认值，避免插件崩溃
+      return {
+        content: '获取格言失败，请检查网络或设置',
+        source: 'Marginalia',
+        type: 'error'
+      };
     }
   }
 
