@@ -1,7 +1,7 @@
 {
   "id": "marginalia",
   "name": "Marginalia",
-  "version": "1.0.0.5",
+  "version": "1.0.0.6",
   "minAppVersion": "0.15.0",
   "description": "A lightweight status bar plugin to display random quotes from Hitokoto or custom lists.",
   "author": "Open Open",
