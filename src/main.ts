@@ -21,30 +21,24 @@ export default class MarginaliaPlugin extends Plugin {
     this.quoteManager = new QuoteManager(this.settings.customQuotes);
 
     // 创建状态栏组件
-    this.statusBarComponent = new StatusBarComponent(this, () => this.refreshQuote());
+    this.statusBarComponent = new StatusBarComponent(this, () => void this.refreshQuote());
 
     // 注册设置面板
     this.addSettingTab(new MarginaliaSettingTab(this.app, this));
 
     // 初始加载格言
-    this.refreshQuote();
+    void this.refreshQuote();
 
     // 设置定时刷新
     this.updateRefreshTimer();
-
-    // 输出加载信息
-    console.log('Marginalia plugin loaded');
   }
 
-  async onunload() {
+  onunload() {
     // 清理定时器
     this.clearRefreshTimer();
 
     // 移除状态栏组件
     this.statusBarComponent.remove();
-
-    // 输出卸载信息
-    console.log('Marginalia plugin unloaded');
   }
 
   async loadSettings() {
@@ -106,7 +100,7 @@ export default class MarginaliaPlugin extends Plugin {
     if (this.settings.autoRefresh && this.settings.refreshInterval > 0) {
       const intervalMs = this.settings.refreshInterval * 60 * 1000;
       this.refreshTimer = window.setInterval(() => {
-        this.refreshQuote();
+        void this.refreshQuote();
       }, intervalMs);
     }
   }

@@ -33,19 +33,26 @@
 /* 1. 将父级状态栏项设为"定位基准点" */
 .status-bar-item.marginalia-status-item {
   position: relative !important;
-  overflow: visible !important; /* 核心：允许气泡飞出边界 */
+  overflow: visible !important;
+  /* 核心：允许气泡飞出边界 */
   display: flex;
-  align-items: center; /* 确保图标和文字垂直居中 */
+  align-items: center;
+  /* 确保图标和文字垂直居中 */
+  text-align: center;
 }
 
 /* 2. 气泡本体：强制脱离文档流 */
 .marginalia-tooltip {
-  position: absolute !important; /* 核心：绝对定位 */
-  bottom: 100% !important; /* 位于父元素顶部 */
+  position: absolute !important;
+  /* 核心：绝对定位 */
+  bottom: 100% !important;
+  /* 位于父元素顶部 */
   left: 50% !important;
-  transform: translateX(-50%) translateY(-8px); /* 水平居中并向上留出 8px 间隙 */
+  transform: translateX(-50%) translateY(-8px);
+  /* 水平居中并向上留出 8px 间隙 */
   /* 视觉复刻图二风格 */
-  background-color: #222; /* 深黑色背景 */
+  background-color: #222;
+  /* 深黑色背景 */
   color: #fff;
   padding: 6px 12px;
   border-radius: 6px;
@@ -66,23 +73,30 @@
 .marginalia-tooltip::after {
   content: "";
   position: absolute;
-  top: 100%; /* 接在气泡底部 */
+  top: 100%;
+  /* 接在气泡底部 */
   left: 50%;
-  margin-left: -6px; /* 居中校正 */
+  margin-left: -6px;
+  /* 居中校正 */
   border-width: 6px;
   border-style: solid;
-  border-color: #222 transparent transparent transparent; /* 颜色要和背景一致 */
+  border-color: #222 transparent transparent transparent;
+  /* 颜色要和背景一致 */
 }
 
 /* 4. 悬停触发 */
 .status-bar-item.marginalia-status-item:hover .marginalia-tooltip {
   opacity: 1;
   visibility: visible;
-  transform: translateX(-50%) translateY(-12px); /* 悬浮时有一个轻微上浮动效 */
+  transform: translateX(-50%) translateY(-12px);
+  /* 悬浮时有一个轻微上浮动效 */
 }
 
-/* 确保设置面板中的文本区域样式一致 */
-.marginalia-settings textarea {
+/* 自定义格言输入框 */
+.marginalia-textarea {
+  display: block;
+  width: 100%;
+  height: 200px;
   font-family: var(--font-monospace);
   font-size: 14px;
   line-height: 1.5;
@@ -94,7 +108,7 @@
   resize: vertical;
 }
 
-.marginalia-settings textarea:focus {
+.marginalia-textarea:focus {
   outline: none;
   border-color: var(--interactive-accent);
   box-shadow: 0 0 0 1px var(--interactive-accent);
@@ -113,55 +127,4 @@
   .marginalia-category-name {
     font-size: 13px;
   }
-}
-
-/* 1. 状态栏项设为相对定位，作为气泡的坐标原点 */
-.status-bar-item.marginalia-status-item {
-  position: relative;
-  overflow: visible !important; /* 允许气泡超出状态栏边界 */
-}
-
-/* 2. 气泡本体 */
-.marginalia-tooltip {
-  position: absolute;
-  bottom: 130%; /* 距离文字上方有一点间隙 */
-  left: 50%;
-  transform: translateX(-50%) translateY(5px); /* 初始位置略下沉 */
-
-  /* 视觉样式 */
-  background-color: var(--background-modifier-message); /* 使用 Obsidian 原生深色背景变量 */
-  color: var(--text-on-accent); /* 亮色文字 */
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 11px;
-  line-height: 1.2;
-  white-space: nowrap; /* 防止换行 */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  pointer-events: none; /* 让鼠标事件穿透 */
-
-  /* 动画状态：隐藏 */
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-  z-index: 1000;
-}
-
-/* 3. 气泡下方的小三角箭头 (CSS Magic) */
-.marginalia-tooltip::after {
-  content: "";
-  position: absolute;
-  top: 100%; /* 接在气泡底部 */
-  left: 50%;
-  margin-left: -5px; /* 居中校正 */
-  border-width: 5px;
-  border-style: solid;
-  /* 上边框有颜色（形成倒三角），其他透明 */
-  border-color: var(--background-modifier-message) transparent transparent transparent;
-}
-
-/* 4. 悬停触发显示 */
-.status-bar-item.marginalia-status-item:hover .marginalia-tooltip {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-50%) translateY(0); /* 只有轻微的上浮动画 */
 }

@@ -1,4 +1,4 @@
-import { App, PluginSettingTab, Setting, ToggleComponent } from 'obsidian';
+import { App, PluginSettingTab, Setting, ToggleComponent, Notice } from 'obsidian';
 import MarginaliaPlugin from './main';
 
 export interface MarginaliaSettings {
@@ -12,7 +12,9 @@ export interface MarginaliaSettings {
 export const DEFAULT_SETTINGS: MarginaliaSettings = {
   dataSource: 'hitokoto',
   hitokotoCategories: ['a', 'b', 'd', 'i', 'k'], // 动画、漫画、文学、诗词、哲学
-  customQuotes: '',
+  customQuotes: `天天开心！ | 开开
+Live long and prosper!
+要有天才般的自信，以及蠢才般的谦卑 | Open Open`,
   refreshInterval: 5,
   autoRefresh: true
 };
@@ -30,7 +32,7 @@ export class MarginaliaSettingTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    containerEl.createEl('h2', { text: 'Marginalia 浮签设置' });
+    new Setting(containerEl).setName('Marginalia 浮签设置').setHeading();
 
     // 数据源选择
     new Setting(containerEl)
@@ -41,18 +43,20 @@ export class MarginaliaSettingTab extends PluginSettingTab {
           .addOption('hitokoto', '一言 API')
           .addOption('custom', '本地自定义列表')
           .setValue(this.plugin.settings.dataSource)
-          .onChange(async (value) => {
-            this.plugin.settings.dataSource = value as 'hitokoto' | 'custom';
-            await this.plugin.saveSettings();
-            this.plugin.refreshQuote();
-            // 刷新设置面板，显示/隐藏相关选项
-            this.display();
+          .onChange((value) => {
+            void (async () => {
+              this.plugin.settings.dataSource = value as 'hitokoto' | 'custom';
+              await this.plugin.saveSettings();
+              void this.plugin.refreshQuote();
+              // 刷新设置面板，显示/隐藏相关选项
+              this.display();
+            })();
           });
       });
 
     // 一言分类设置（仅当数据源为一言时显示）
     if (this.plugin.settings.dataSource === 'hitokoto') {
-      containerEl.createEl('h3', { text: '一言分类' });
+      new Setting(containerEl).setName('一言分类').setHeading();
       containerEl.createEl('p', { text: '选择要获取的格言分类：' });
 
       // 分类列表
@@ -76,38 +80,30 @@ export class MarginaliaSettingTab extends PluginSettingTab {
 
       // 创建分类选择区域
       const categoriesContainer = containerEl.createEl('div', { cls: 'marginalia-categories-container' });
-      categoriesContainer.style.display = 'grid';
-      categoriesContainer.style.gridTemplateColumns = 'repeat(auto-fill, minmax(120px, 1fr))';
-      categoriesContainer.style.gap = '8px';
-      categoriesContainer.style.marginBottom = '16px';
 
       categoryGroups.forEach(([code, name]) => {
         const categoryItem = categoriesContainer.createEl('div', { cls: 'marginalia-category-item' });
         const toggle = new ToggleComponent(categoryItem);
         
         toggle.setValue(this.plugin.settings.hitokotoCategories.includes(code));
-        toggle.onChange(async (value) => {
-          if (value) {
-            if (!this.plugin.settings.hitokotoCategories.includes(code)) {
-              this.plugin.settings.hitokotoCategories.push(code);
+        toggle.onChange((value) => {
+          void (async () => {
+            if (value) {
+              if (!this.plugin.settings.hitokotoCategories.includes(code)) {
+                this.plugin.settings.hitokotoCategories.push(code);
+              }
+            } else {
+              this.plugin.settings.hitokotoCategories = this.plugin.settings.hitokotoCategories.filter(c => c !== code);
             }
-          } else {
-            this.plugin.settings.hitokotoCategories = this.plugin.settings.hitokotoCategories.filter(c => c !== code);
-          }
-          await this.plugin.saveSettings();
-          this.plugin.refreshQuote();
+            await this.plugin.saveSettings();
+            void this.plugin.refreshQuote();
+          })();
         });
 
         categoryItem.createEl('span', { 
           text: name, 
           cls: 'marginalia-category-name' 
         });
-        categoryItem.style.display = 'flex';
-        categoryItem.style.alignItems = 'center';
-        categoryItem.style.justifyContent = 'space-between';
-        categoryItem.style.padding = '4px 8px';
-        categoryItem.style.borderRadius = '4px';
-        categoryItem.style.backgroundColor = 'var(--background-secondary)';
       });
     }
 
@@ -119,20 +115,20 @@ export class MarginaliaSettingTab extends PluginSettingTab {
         .addTextArea((textarea) => {
           textarea
             .setValue(this.plugin.settings.customQuotes)
-            .onChange(async (value) => {
+            .onChange((value) => {
               // 清除旧的定时器
               if (this.debounceTimer) clearTimeout(this.debounceTimer);
               
               // 设置新的定时器，延迟 1000ms
-              this.debounceTimer = setTimeout(async () => {
-                this.plugin.settings.customQuotes = value;
-                await this.plugin.saveSettings();
-                this.plugin.refreshQuote();
+              this.debounceTimer = setTimeout(() => {
+                void (async () => {
+                  this.plugin.settings.customQuotes = value;
+                  await this.plugin.saveSettings();
+                  void this.plugin.refreshQuote();
+                })();
               }, 1000);
             });
-          textarea.inputEl.style.width = '100%';
-          textarea.inputEl.style.height = '200px';
-          textarea.inputEl.style.fontFamily = 'monospace';
+          textarea.inputEl.addClass('marginalia-textarea');
         });
     }
 
@@ -143,10 +139,12 @@ export class MarginaliaSettingTab extends PluginSettingTab {
       .addToggle((toggle) => {
         toggle
           .setValue(this.plugin.settings.autoRefresh)
-          .onChange(async (value) => {
-            this.plugin.settings.autoRefresh = value;
-            await this.plugin.saveSettings();
-            this.plugin.updateRefreshTimer();
+          .onChange((value) => {
+            void (async () => {
+              this.plugin.settings.autoRefresh = value;
+              await this.plugin.saveSettings();
+              this.plugin.updateRefreshTimer();
+            })();
           });
       });
 
@@ -160,10 +158,12 @@ export class MarginaliaSettingTab extends PluginSettingTab {
             .setLimits(1, 60, 1)
             .setValue(this.plugin.settings.refreshInterval)
             .setDynamicTooltip()
-            .onChange(async (value) => {
-              this.plugin.settings.refreshInterval = value;
-              await this.plugin.saveSettings();
-              this.plugin.updateRefreshTimer();
+            .onChange((value) => {
+              void (async () => {
+                this.plugin.settings.refreshInterval = value;
+                await this.plugin.saveSettings();
+                this.plugin.updateRefreshTimer();
+              })();
             });
         });
     }
@@ -176,7 +176,24 @@ export class MarginaliaSettingTab extends PluginSettingTab {
         button
           .setButtonText('刷新')
           .onClick(() => {
-            this.plugin.refreshQuote();
+            void this.plugin.refreshQuote();
+          });
+      });
+
+    // 重置设置按钮
+    new Setting(containerEl)
+      .setName('重置设置')
+      .setDesc('恢复默认设置')
+      .addButton((button) => {
+        button
+          .setButtonText('重置')
+          .setWarning()
+          .onClick(async () => {
+            this.plugin.settings = Object.assign({}, DEFAULT_SETTINGS);
+            await this.plugin.saveSettings();
+            void this.plugin.refreshQuote();
+            this.display();
+            new Notice('设置已重置');
           });
       });
   }

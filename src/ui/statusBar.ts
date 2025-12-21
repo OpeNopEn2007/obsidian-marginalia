@@ -1,4 +1,4 @@
-import { Plugin, Platform, setIcon } from 'obsidian';
+import { Plugin, setIcon } from 'obsidian';
 import { Quote } from '../services/hitokoto';
 
 export class StatusBarComponent {
@@ -10,7 +10,6 @@ export class StatusBarComponent {
 
     constructor(plugin: Plugin, onClickCallback: () => void) {
         this.statusBarItem = plugin.addStatusBarItem();
-        this.statusBarItem.style.textAlign = 'center';
         this.onClickCallback = onClickCallback;
 
         // 添加自定义类，设置为相对定位
@@ -42,7 +41,7 @@ export class StatusBarComponent {
         // 右键点击复制到剪贴板
         this.statusBarItem.addEventListener('contextmenu', (e: MouseEvent) => {
             e.preventDefault();
-            this.copyQuoteToClipboard();
+            void this.copyQuoteToClipboard();
         });
     }
 
@@ -64,22 +63,7 @@ export class StatusBarComponent {
         const textToCopy = this.currentQuote.content;
 
         try {
-            if (Platform.isDesktopApp) {
-                // 桌面端使用剪贴板 API
-                await navigator.clipboard.writeText(textToCopy);
-            } else {
-                // 移动端或其他环境使用 fallback
-                const textArea = document.createElement('textarea');
-                textArea.value = textToCopy;
-                textArea.style.position = 'fixed';
-                textArea.style.left = '-999999px';
-                textArea.style.top = '-999999px';
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-            }
+            await navigator.clipboard.writeText(textToCopy);
 
             // 可以添加一个短暂的提示
             this.showTemporaryMessage('已复制到剪贴板');
