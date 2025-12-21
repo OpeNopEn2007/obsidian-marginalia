@@ -1,7 +1,7 @@
 {
   "name": "marginalia",
-  "version": "1.0.0.4",
-  "description": "Obsidian plugin for displaying quotes in status bar",
+  "version": "1.0.0.5",
+  "description": "A lightweight status bar plugin for Obsidian to display random quotes from Hitokoto or custom lists.",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",
