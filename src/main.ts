@@ -12,25 +12,27 @@ export default class MarginaliaPlugin extends Plugin {
   private statusBarComponent!: StatusBarComponent;
   private refreshTimer: number | null = null;
 
-  async onload(): Promise<void> {
-    // 加载设置
-    await this.loadSettings();
+  onload(): void {
+    void (async () => {
+      // 加载设置
+      await this.loadSettings();
 
-    // 初始化服务
-    this.hitokotoService = new HitokotoService();
-    this.quoteManager = new QuoteManager(this.settings.customQuotes);
+      // 初始化服务
+      this.hitokotoService = new HitokotoService();
+      this.quoteManager = new QuoteManager(this.settings.customQuotes);
 
-    // 创建状态栏组件
-    this.statusBarComponent = new StatusBarComponent(this, () => void this.refreshQuote());
+      // 创建状态栏组件
+      this.statusBarComponent = new StatusBarComponent(this, () => void this.refreshQuote());
 
-    // 注册设置面板
-    this.addSettingTab(new MarginaliaSettingTab(this.app, this));
+      // 注册设置面板
+      this.addSettingTab(new MarginaliaSettingTab(this.app, this));
 
-    // 初始加载格言
-    void this.refreshQuote();
+      // 初始加载格言
+      void this.refreshQuote();
 
-    // 设置定时刷新
-    this.updateRefreshTimer();
+      // 设置定时刷新
+      this.updateRefreshTimer();
+    })();
   }
 
   onunload(): void {
