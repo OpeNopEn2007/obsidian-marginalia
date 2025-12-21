@@ -12,7 +12,7 @@ export default class MarginaliaPlugin extends Plugin {
   private statusBarComponent!: StatusBarComponent;
   private refreshTimer: number | null = null;
 
-  async onload() {
+  async onload(): Promise<void> {
     // 加载设置
     await this.loadSettings();
 
@@ -33,7 +33,7 @@ export default class MarginaliaPlugin extends Plugin {
     this.updateRefreshTimer();
   }
 
-  onunload() {
+  onunload(): void {
     // 清理定时器
     this.clearRefreshTimer();
 
