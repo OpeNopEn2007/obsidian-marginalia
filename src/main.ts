@@ -37,8 +37,12 @@ export default class MarginaliaPlugin extends Plugin {
     // 清理定时器
     this.clearRefreshTimer();
 
-    // 移除状态栏组件
-    this.statusBarComponent.remove();
+    if (this.statusBarComponent) {
+      this.statusBarComponent.remove();
+    }
+    
+    // 重点：直接调用，不要加 return，前面可以加个 void 确保类型安全
+    void this.saveSettings();
   }
 
   async loadSettings() {

@@ -32,7 +32,7 @@ export class MarginaliaSettingTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    new Setting(containerEl).setName('插件设置').setHeading();
+    new Setting(containerEl).setName('Settings').setHeading();
 
     // 数据源选择
     new Setting(containerEl)
