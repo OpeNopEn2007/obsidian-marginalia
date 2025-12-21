@@ -32,7 +32,7 @@ export class MarginaliaSettingTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    new Setting(containerEl).setName('Marginalia 浮签设置').setHeading();
+    new Setting(containerEl).setName('插件设置').setHeading();
 
     // 数据源选择
     new Setting(containerEl)
@@ -188,12 +188,14 @@ export class MarginaliaSettingTab extends PluginSettingTab {
         button
           .setButtonText('重置')
           .setWarning()
-          .onClick(async () => {
-            this.plugin.settings = Object.assign({}, DEFAULT_SETTINGS);
-            await this.plugin.saveSettings();
-            void this.plugin.refreshQuote();
-            this.display();
-            new Notice('设置已重置');
+          .onClick(() => {
+            void (async () => {
+              this.plugin.settings = Object.assign({}, DEFAULT_SETTINGS);
+              await this.plugin.saveSettings();
+              void this.plugin.refreshQuote();
+              this.display();
+              new Notice('设置已重置');
+            })();
           });
       });
   }
