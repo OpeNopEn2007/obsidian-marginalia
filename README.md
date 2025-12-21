@@ -2,7 +2,52 @@
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/OpeNopEn2007/obsidian-marginalia)
 ![GitHub license](https://img.shields.io/github/license/OpeNopEn2007/obsidian-marginalia)
-![GitHub downloads](https://img.shields.io/github/downloads/OpeNopEn2007/obsidian-marginalia/total)
+![Downloads](https://img.shields.io/github/downloads/OpeNopEn2007/obsidian-marginalia/total)
+
+> [中文说明请下滑 (Scroll down for Chinese)](#-中文说明-chinese-readme)
+
+**Marginalia** is a lightweight, immersive status bar plugin for Obsidian that utilizes the small space at the edge of your screen to provide unexpected inspiration. It displays random quotes, aphorisms, or inspiration fragments from the "Hitokoto" API or your custom library.
+
+![online_mode_demo](asset/online_mode_demo.gif)
+
+## ✨ Features
+
+- 📝 **Multiple Data Sources**: Support "Hitokoto" API and local custom lists.
+- 🔄 **Auto Refresh**: Configurable refresh interval (1-60 minutes) to keep inspiration flowing.
+- 🔀 **Category Selection**: Filter quotes by Anime, Literature, Philosophy, Poetry, etc.
+- 📋 **Private Library**: Manage your own collection of quotes.
+- 🖱️ **Minimalist Interaction**: Hover to view source, click to refresh, right-click to copy.
+- 📱 **Cross-Platform**: Perfectly adapted for both Desktop and Mobile UI.
+
+## 📥 Installation
+
+1. Open **Settings** -> **Community Plugins** and turn off **Safe Mode**.
+2. Click **Browse**, search for **Marginalia**, and click **Install**.
+3. Enable the plugin in the Community Plugins tab.
+
+## ⚙️ Usage
+
+### Settings
+
+- **Data Source**: Switch between "Hitokoto API" and "Custom List".
+- **Hitokoto Categories**: Select categories (e.g., Animation, Literature, Philosophy).
+- **Custom Quotes**: Enter quotes one per line. Format: `Content | Source`.
+- **Auto Refresh**: Set the timer interval in minutes.
+
+## 🔐 Privacy & Network
+
+This plugin connects to the **Hitokoto API** (`https://v1.hitokoto.cn`) to fetch random quotes.
+
+- **Data Sent**: Only quote category parameters are sent.
+- **Data Received**: Quote content, author, and source.
+- **No User Data Collected**: No personal information is stored or transmitted.
+- **Offline Mode**: Fully functional offline when using "Custom List".
+
+---
+
+# 🇨🇳 中文说明 (Chinese Readme)
+
+# Marginalia 浮签
 
 > 利用屏幕边缘的微小空间，为写作者提供不期而遇的灵感。
 
