@@ -1,38 +1,40 @@
-import { Plugin, Notice } from 'obsidian';
-// Test auto sync functionality
+import { Plugin, Notice, moment } from 'obsidian';
 import { MarginaliaSettings, DEFAULT_SETTINGS, MarginaliaSettingTab } from './settings';
 import { HitokotoService, Quote } from './services/hitokoto';
+import { QuotableService } from './services/quotable';
 import { QuoteManager } from './services/quoteManager';
 import { StatusBarComponent } from './ui/statusBar';
+import { t } from './lang/locale';
 
 export default class MarginaliaPlugin extends Plugin {
   public settings!: MarginaliaSettings;
   private hitokotoService!: HitokotoService;
+  private quotableService!: QuotableService;
   private quoteManager!: QuoteManager;
   private statusBarComponent!: StatusBarComponent;
   private refreshTimer: number | null = null;
 
-  onload(): void {
-    void (async () => {
-      // 加载设置
-      await this.loadSettings();
+  async onload(): Promise<void> {
+    // 加载设置
+    await this.loadSettings();
 
-      // 初始化服务
-      this.hitokotoService = new HitokotoService();
-      this.quoteManager = new QuoteManager(this.settings.customQuotes);
+    // 初始化服务
+    this.hitokotoService = new HitokotoService();
+    this.quotableService = new QuotableService();
+    const customQuotes = this.settings.customQuotes?.trim() ? this.settings.customQuotes : t("Default Custom Quotes");
+    this.quoteManager = new QuoteManager(customQuotes);
 
-      // 创建状态栏组件
-      this.statusBarComponent = new StatusBarComponent(this, () => void this.refreshQuote());
+    // 创建状态栏组件
+    this.statusBarComponent = new StatusBarComponent(this, () => void this.refreshQuote());
 
-      // 注册设置面板
-      this.addSettingTab(new MarginaliaSettingTab(this.app, this));
+    // 注册设置面板
+    this.addSettingTab(new MarginaliaSettingTab(this.app, this));
 
-      // 初始加载格言
-      void this.refreshQuote();
+    // 初始加载格言
+    void this.refreshQuote();
 
-      // 设置定时刷新
-      this.updateRefreshTimer();
-    })();
+    // 设置定时刷新
+    this.updateRefreshTimer();
   }
 
   onunload(): void {
@@ -48,13 +50,29 @@ export default class MarginaliaPlugin extends Plugin {
   }
 
   async loadSettings() {
-    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+    const loadedData = await this.loadData();
+    const isZh = moment.locale().startsWith('zh');
+    
+    // 智能默认值逻辑：仅当首次安装（无数据或无 dataSource）时执行
+    let defaultSource: 'hitokoto' | 'quotable' = 'quotable'; // 默认英文
+
+    if (isZh) {
+        defaultSource = 'hitokoto';
+    }
+    
+    // 构造有效的默认设置
+    const effectiveDefaults = Object.assign({}, DEFAULT_SETTINGS, { 
+        dataSource: defaultSource
+    });
+
+    this.settings = Object.assign({}, effectiveDefaults, loadedData);
   }
 
   async saveSettings() {
     await this.saveData(this.settings);
     // 更新本地格言管理器
-    this.quoteManager.loadQuotes(this.settings.customQuotes);
+    const customQuotes = this.settings.customQuotes?.trim() ? this.settings.customQuotes : t("Default Custom Quotes");
+    this.quoteManager.loadQuotes(customQuotes);
   }
 
   async refreshQuote() {
@@ -70,6 +88,9 @@ export default class MarginaliaPlugin extends Plugin {
         if (currentQuote && quote.content === currentQuote.content) {
           quote = await this.hitokotoService.getRandomQuote(this.settings.hitokotoCategories);
         }
+      } else if (this.settings.dataSource === 'quotable') {
+        // 从 Quotable API 获取 (含 ZenQuotes 回退)
+        quote = await this.quotableService.getRandomQuote();
       } else {
         // 从本地自定义列表获取
         const randomQuote = this.quoteManager.getRandomQuote();
@@ -78,23 +99,37 @@ export default class MarginaliaPlugin extends Plugin {
         } else {
           // 如果本地列表为空，显示提示信息
           quote = {
-            content: '请在设置中添加自定义格言',
-            source: 'Marginalia'
+            content: t('Please add custom quotes in settings'),
+            author: 'Marginalia'
           };
         }
       }
 
       // 更新状态栏显示
       this.statusBarComponent.updateQuote(quote);
-      // 显示刷新成功提示
-      new Notice('格言已刷新');
+      
+      // 根据引用类型显示不同的通知
+      if (quote.type === 'error') {
+          // 如果是 Hitokoto 返回的错误对象
+          new Notice(`Marginalia Error: ${quote.content}`);
+      } else {
+          // 显示刷新成功提示
+          new Notice(t('Quote refreshed'));
+      }
     } catch (error) {
       console.error('Failed to refresh quote:', error);
       // 显示错误提示
       this.statusBarComponent.updateQuote({
-        content: '获取格言失败，请检查网络或设置',
-        source: 'Marginalia'
+        content: t('Fetch Error'),
+        author: 'Marginalia'
       });
+      
+      // 显示错误通知
+      if (error instanceof Error) {
+          new Notice(`Marginalia Error: ${error.message}`);
+      } else {
+          new Notice(`Marginalia Error: ${t('Fetch Error')}`);
+      }
     }
   }
 
@@ -105,15 +140,20 @@ export default class MarginaliaPlugin extends Plugin {
     // 如果启用了自动刷新，设置新的定时器
     if (this.settings.autoRefresh && this.settings.refreshInterval > 0) {
       const intervalMs = this.settings.refreshInterval * 60 * 1000;
-      this.refreshTimer = window.setInterval(() => {
+      // 使用 window.setInterval 获取 ID
+      const id = window.setInterval(() => {
         void this.refreshQuote();
       }, intervalMs);
+      
+      // 注册 interval 以便 Obsidian 管理
+      this.registerInterval(id);
+      this.refreshTimer = id;
     }
   }
 
   private clearRefreshTimer() {
     if (this.refreshTimer) {
-      clearInterval(this.refreshTimer);
+      window.clearInterval(this.refreshTimer);
       this.refreshTimer = null;
     }
   }

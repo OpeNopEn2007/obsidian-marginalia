@@ -1,5 +1,6 @@
 import { Plugin, setIcon } from 'obsidian';
 import { Quote } from '../services/hitokoto';
+import { t } from '../lang/locale';
 
 export class StatusBarComponent {
     private statusBarItem: HTMLElement;
@@ -7,8 +8,10 @@ export class StatusBarComponent {
     private tooltipEl: HTMLElement;
     private currentQuote: Quote | null = null;
     private onClickCallback: () => void;
+    private plugin: Plugin;
 
     constructor(plugin: Plugin, onClickCallback: () => void) {
+        this.plugin = plugin;
         this.statusBarItem = plugin.addStatusBarItem();
         this.onClickCallback = onClickCallback;
 
@@ -31,15 +34,14 @@ export class StatusBarComponent {
     }
 
     private bindEvents(): void {
-        // 左键点击刷新
-        this.statusBarItem.addEventListener('click', (e: MouseEvent) => {
+        // 使用 registerDomEvent 以符合 Obsidian 插件规范
+        this.plugin.registerDomEvent(this.statusBarItem, 'click', (e: MouseEvent) => {
             if (e.button === 0) { // 左键
                 this.onClickCallback();
             }
         });
 
-        // 右键点击复制到剪贴板
-        this.statusBarItem.addEventListener('contextmenu', (e: MouseEvent) => {
+        this.plugin.registerDomEvent(this.statusBarItem, 'contextmenu', (e: MouseEvent) => {
             e.preventDefault();
             void this.copyQuoteToClipboard();
         });
@@ -52,7 +54,8 @@ export class StatusBarComponent {
         this.textEl.textContent = quote.content;
 
         // 更新自定义气泡提示内容
-        this.tooltipEl.setText(quote.source ? `from ${quote.source}` : "from Unknown");
+        // 使用 — 作为通用分隔符，避免 "from" 的翻译问题
+        this.tooltipEl.setText(quote.author ? `— ${quote.author}` : t("from Unknown"));
     }
 
     private async copyQuoteToClipboard(): Promise<void> {
@@ -66,7 +69,7 @@ export class StatusBarComponent {
             await navigator.clipboard.writeText(textToCopy);
 
             // 可以添加一个短暂的提示
-            this.showTemporaryMessage('已复制到剪贴板');
+            this.showTemporaryMessage(t('Copied to clipboard'));
         } catch (err) {
             console.error('Failed to copy quote:', err);
         }
@@ -75,6 +78,12 @@ export class StatusBarComponent {
     private showTemporaryMessage(message: string): void {
     // 保存当前的文本和提示
     const originalText = this.textEl.textContent || '';
+    const originalTooltip = this.tooltipEl.getText(); // Use getText() instead of accessing property if possible, but setText/getText pair exists? HTMLElement doesn't have getText usually.
+    // textContent is standard.
+    // But for tooltipEl, I used setText above.
+    // I should save the tooltip content.
+    // Since I just set it in updateQuote, I can reconstruct it or just read textContent.
+    const originalTooltipText = this.tooltipEl.textContent || '';
     
     // 显示临时消息
     this.textEl.textContent = `✓ ${message}`;
@@ -82,11 +91,14 @@ export class StatusBarComponent {
     
     // 2秒后恢复原状
     setTimeout(() => {
+      // If quote hasn't changed, restore.
+      // But check if currentQuote is still the same?
+      // The original code re-called updateQuote(this.currentQuote).
       if (this.currentQuote) {
         this.updateQuote(this.currentQuote);
       } else {
         this.textEl.textContent = originalText;
-        this.tooltipEl.setText('');
+        this.tooltipEl.setText(originalTooltipText);
       }
     }, 2000);
   }

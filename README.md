@@ -1,276 +1,239 @@
-# Marginalia 浮签
+# Marginalia
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/OpeNopEn2007/obsidian-marginalia)
 ![GitHub license](https://img.shields.io/github/license/OpeNopEn2007/obsidian-marginalia)
 ![Downloads](https://img.shields.io/github/downloads/OpeNopEn2007/obsidian-marginalia/total)
 
-> [中文说明请下滑 (Scroll down for Chinese)](#-中文说明-chinese-readme)
+> [🇨🇳 中文说明 (Chinese Documentation)](README.zh-CN.md)
 
-**Marginalia** is a lightweight, immersive status bar plugin for Obsidian that utilizes the small space at the edge of your screen to provide unexpected inspiration. It displays random quotes, aphorisms, or inspiration fragments from the "Hitokoto" API or your custom library.
+> Utilizing the marginal space of your screen to provide unexpected inspiration for writers.
 
-![online_mode_demo](asset/online_mode_demo.gif)
+**Marginalia** is a lightweight, immersive status bar plugin for Obsidian. It utilizes the status bar space at the bottom of the screen to display quotes, aphorisms, or fragments of inspiration from the "Hitokoto" API, the "Quotable" API (with ZenQuotes fallback), or a custom quote library.
+
+## Table of Contents
+
+* [✨ Features](#-features)
+* [📥 Installation](#-installation)
+* [🔒 Privacy &amp; Network](#-privacy--network)
+* [⚙️ Configuration](#-configuration)
+* [🛠️ Development](#-development)
+* [📜 License](#-license)
+* [🤝 Contribution &amp; Contact](#-contribution--contact)
+* [📅 Changelog](#-changelog)
 
 ## ✨ Features
 
-- 📝 **Multiple Data Sources**: Support "Hitokoto" API and local custom lists.
-- 🔄 **Auto Refresh**: Configurable refresh interval (1-60 minutes) to keep inspiration flowing.
-- 🔀 **Category Selection**: Filter quotes by Anime, Literature, Philosophy, Poetry, etc.
-- 📋 **Private Library**: Manage your own collection of quotes.
-- 🖱️ **Minimalist Interaction**: Hover to view source, click to refresh, right-click to copy.
-- 📱 **Cross-Platform**: Perfectly adapted for both Desktop and Mobile UI.
+* 📝 **Multiple Data Sources**: Supports ["Hitokoto"](https://hitokoto.cn/) API, ["Quotable"](https://quotable.io/) API (with [ZenQuotes](https://zenquotes.io/) fallback), and local custom lists.
+* 🔄 **Auto Refresh**: Configurable auto-refresh interval (1-60 minutes) to keep inspiration flowing.
+* 🔀 **Category Selection**: Supports filtering for specific types of sentences such as Anime, Literature, Philosophy, Poetry, etc.
+* 📋 **Private Library**: Supports adding and managing your own collection of excerpts.
+* 🖱️ **Minimalist Interaction**: Hover to view the source, click to refresh immediately, and right-click to copy.
+* 📱 **Cross-Platform**: Perfectly adapted for both Desktop and Mobile UIs.
 
-## 📥 Installation
+### Feature Demo
 
-1. Open **Settings** -> **Community Plugins** and turn off **Safe Mode**.
-2. Click **Browse**, search for **Marginalia**, and click **Install**.
-3. Enable the plugin in the Community Plugins tab.
-
-## ⚙️ Usage
-
-### Settings
-
-- **Data Source**: Switch between "Hitokoto API" and "Custom List".
-- **Hitokoto Categories**: Select categories (e.g., Animation, Literature, Philosophy).
-- **Custom Quotes**: Enter quotes one per line. Format: `Content | Source`.
-- **Auto Refresh**: Set the timer interval in minutes.
-
-## 🔐 Privacy & Network
-
-This plugin connects to the **Hitokoto API** (`https://v1.hitokoto.cn`) to fetch random quotes.
-
-- **Data Sent**: Only quote category parameters are sent.
-- **Data Received**: Quote content, author, and source.
-- **No User Data Collected**: No personal information is stored or transmitted.
-- **Offline Mode**: Fully functional offline when using "Custom List".
-
----
-
-# 🇨🇳 中文说明 (Chinese Readme)
-
-# Marginalia 浮签
-
-> 利用屏幕边缘的微小空间，为写作者提供不期而遇的灵感。
-
-**Marginalia (浮签)** 是一款基于 Obsidian 的沉浸式状态栏插件。它利用屏幕底部的状态栏空间，通过“一言」API 或自定义语录库，展示格言、名言或灵感片段。
-
-## 目录
-
-- [✨ 功能特性](#-功能特性)
-- [📥 安装方法](#-安装方法)
-- [🔒 隐私与网络连接](#-隐私与网络连接)
-- [⚙️ 配置说明](#️-配置说明)
-- [🛠️ 开发说明](#️-开发说明)
-- [📜 许可证](#-许可证)
-- [🤝 贡献与联系](#-贡献与联系)
-- [📅 更新日志
-  ](#-更新日志)
-
----
-
-## ✨ 功能特性
-
-- 📝 **多种数据源**：支持「一言」API (Hitokoto) 和本地自定义列表。
-- 🔄 **自动刷新**：可配置自动刷新间隔（1-60分钟），让灵感流动。
-- 🔀 **分类精选**：支持筛选动画、文学、哲学、诗词等特定类型的句子。
-- 📋 **私有语录**：支持添加和管理你自己的摘抄库。
-- 🖱️ **极简交互**：悬浮查看来源，点击立即刷新，右键一键复制。
-- 📱 **全端支持**：完美适配桌面端和移动端 UI。
-
-### 功能演示
-
-* 本地自定义列表模式
+* **Local Custom List Mode**
 
 ![local_mode_demo](asset/local_mode_demo.gif)
 
-* 「一言」API模式
+* **"Hitokoto" API Mode**
 
 ![online_mode_demo](asset/online_mode_demo.gif)
 
-* 右键点击即可复制
+* **Right-click to Copy**
 
 ![copy_demo](asset/copy_demo.gif)
 
-## 📥 安装方法
+## 📥 Installation
 
-### 方法一：使用 BRAT 插件安装（推荐用于测试）
+### Method 1: Install using BRAT Plugin (Recommended for testing)
 
-在官方商店审核通过前，推荐使用 [BRAT](https://github.com/TfTHacker/obsidian42-brat) 插件安装：
+Before approval in the official store, it is recommended to use the [BRAT](https://github.com/TfTHacker/obsidian42-brat) plugin for installation:
 
-1. 在 Obsidian 社区插件市场搜索并安装 **BRAT**。
-2. 打开 BRAT 设置，点击 `Add Beta plugin`。
-3. 输入本仓库地址：`https://github.com/OpeNopEn2007/obsidian-marginalia`
-4. 点击 `Add Plugin` 即可。
+1. Search for and install **BRAT** in the Obsidian Community Plugins market.
+2. Open BRAT settings and click `Add Beta plugin`.
+3. Enter the repository URL: `https://github.com/OpeNopEn2007/obsidian-marginalia`
+4. Click `Add Plugin`.
 
-### 方法二：从 Obsidian 社区插件市场安装
+### Method 2: Install from Obsidian Community Plugins
 
-*(注：插件目前正在官方审核流程中，上架后可直接搜索安装)*
+> **Note**: The plugin is currently under official review. Once approved, you can search for and install it directly.
 
-1. 打开 Obsidian 设置 -> **社区插件**。
-2. 关闭「安全模式」。
-3. 点击「浏览」，搜索 `Marginalia`。
-4. 点击安装并启用。
+1. Open Obsidian Settings -> **Community Plugins**.
+2. Turn off "Restricted mode".
+3. Click "Browse" and search for `Marginalia`.
+4. Click Install and Enable.
 
-### 方法三：手动安装
+### Method 3: Manual Installation
 
-1. 在 GitHub Releases 页面下载最新的 `main.js`, `manifest.json`, `styles.css`。
-2. 将文件放入 `.obsidian/plugins/marginalia/` 文件夹中。
-3. 重启 Obsidian 并启用插件。
+1. Download the latest `main.js`, `manifest.json`, and `styles.css` from the GitHub Releases page.
+2. Place the files into the `.obsidian/plugins/marginalia/` folder.
+3. Restart Obsidian and enable the plugin.
 
-## 🔒 隐私与网络连接
+## 🔒 Privacy & Network
 
-### 网络访问说明
+### Network Access Statement
 
-- 当使用 **一言 API** 作为数据源时，插件会定期访问 `https://v1.hitokoto.cn/` 获取随机格言。
-- 当使用 **本地自定义列表** 时，插件不会产生任何网络请求。
+* When using **[Hitokoto](https://hitokoto.cn/) API** as the data source, the plugin periodically accesses `https://v1.hitokoto.cn/` to fetch random quotes.
+* When using **[Quotable](https://quotable.io/) API** as the data source, the plugin accesses `https://api.quotable.io/random` (and falls back to `https://zenquotes.io/api/random` from [ZenQuotes](https://zenquotes.io/) if needed).
+* When using **Local Custom List**, the plugin does not generate any network requests.
 
-### 隐私承诺
+### Privacy Commitment
 
-- **不收集用户数据**：插件不会收集、存储或传输任何用户的个人信息或使用数据。
-- **不跟踪用户行为**：插件不会记录用户的任何操作或偏好。
-- **透明的数据使用**：所有网络请求仅用于获取公开的格言内容，不包含任何用户标识信息。
+* **No User Data Collection**: The plugin does not collect, store, or transmit any personal information or usage data.
+* **No User Tracking**: The plugin does not track any user actions or preferences.
+* **Transparent Data Usage**: All network requests are solely for fetching public quote content and do not contain any user identification information.
 
-### 离线使用支持
+### Offline Support
 
-即使在完全离线的环境中，插件也能正常工作，只需将数据源切换为「本地自定义列表」即可。
+Even in a completely offline environment, the plugin works normally; simply switch the data source to "Local Custom List".
 
-## ⚙️ 配置说明
+## ⚙️ Configuration
 
-### 1. 数据源设置
+### 1. Data Source Settings
 
-- **「一言 」API**：联网获取随机格言。
-- **本地自定义列表**：仅展示本地配置的内容，离线可用。
+* **["Hitokoto"](https://hitokoto.cn/) API**: Fetches random quotes via the internet.
+* **["Quotable"](https://quotable.io/) API**: Fetches random quotes via the internet (with [ZenQuotes](https://zenquotes.io/) fallback).
+* **Local Custom List**: Displays locally configured content only, available offline.
 
-### 2. 「一言」分类对照表
+### 2. "Hitokoto" Category Reference
 
-|    代码    | 分类 |    代码    | 分类 |    代码    | 分类   |
-| :---------: | :--- | :---------: | :--- | :---------: | :----- |
-| **a** | 动画 | **e** | 原创 | **i** | 诗词   |
-| **b** | 漫画 | **f** | 网络 | **j** | 网易云 |
-| **c** | 游戏 | **g** | 其他 | **k** | 哲学   |
-| **d** | 文学 | **h** | 影视 | **l** | 抖机灵 |
+| **Code** | **Category** | **Code** | **Category** | **Code** | **Category** |
+| :------------- | :----------------- | :------------- | :----------------- | :------------- | :----------------- |
+| **a**    | Anime              | **e**    | Original           | **i**    | Poetry             |
+| **b**    | Manga              | **f**    | Internet           | **j**    | Netease Cloud      |
+| **c**    | Game               | **g**    | Other              | **k**    | Philosophy         |
+| **d**    | Literature         | **h**    | Film & TV          | **l**    | Clever/Witty       |
 
-### 3. 自定义格言格式
+### 3. Custom Quote Format
 
-支持纯文本或带来源的文本，一行一条：
+Supports plain text or text with a source, one per line:
 
-```text
-这里是格言内容
-这里是格言内容 | 这里是来源作者
+```plaintext
+Here is the quote content
+Here is the quote content | Here is the author/source
 ```
 
-## 🛠️ 开发说明
+## 🛠️ Development
 
-如果你是开发者，或者想自己修改源码，请参考以下流程。
+If you are a developer or want to modify the source code yourself, please refer to the following process.
 
-**环境要求**
+**Environment Requirements**
 
-- Node.js 16+
-- npm 或 yarn
+* Node.js 16+
+* npm or yarn
 
-**快速开始**
+**Quick Start**
 
-1. **克隆仓库并安装依赖：**
+1. **Clone the repository and install dependencies:**
 
-```Bash
-git clone [https://github.com/OpeNopEn2007/obsidian-marginalia.git](https://github.com/OpeNopEn2007/obsidian-marginalia.git)
+```bash
+git clone https://github.com/OpeNopEn2007/obsidian-marginalia.git
 cd obsidian-marginalia
 npm install
 ```
 
-2. **配置自动部署环境 (可选)：** 本项目支持在开发时自动将构建好的插件同步到你的 Obsidian 测试库。
+2. **Configure Auto-Deployment Environment (Optional):** This project supports automatically syncing the built plugin to your Obsidian test vault during development.
 
-- 复制根目录下的 `.env.example` 文件，重命名为 `.env`。
-- 修改 `.env` 文件中的 `OBSIDIAN_VAULT_PATH` 为你本地 Obsidian 插件目录的绝对路径。
+* Copy the `.env.example` file in the root directory and rename it to `.env`.
+* Modify `OBSIDIAN_VAULT_PATH` in the `.env` file to the absolute path of your local Obsidian plugins directory.
 
-```env
-# .env 示例
+```plaintext
+# .env Example
 OBSIDIAN_VAULT_PATH=D:\Vault\MyTestVault\.obsidian\plugins\marginalia
 ```
 
-- *注意：`.env` 文件已被 git 忽略，你的路径隐私不会被上传。*
+* *Note: The `.env` file is ignored by git, so your path privacy will not be uploaded.*
 
-3. 启动开发模式：
+3. **Start Development Mode:**
 
-```Bash
+```bash
 npm run dev
 ```
 
-此时修改代码，插件会自动重新编译（并同步到你的测试库），在 Obsidian 中通过命令 `Reload app without saving` 即可看到效果。
+At this point, modifying the code will automatically trigger a recompile (and sync to your test vault). You can see the effect in Obsidian by running the command `Reload app without saving`.
 
-4. 构建生产版本：
+4. **Build Production Version:**
 
-```Bash
+```bash
 npm run build
 ```
 
-构建产物将输出至 `./marginalia` 目录。
+The build artifacts will be output to the `./marginalia` directory.
 
-**项目结构**
+**Project Structure**
 
-```Plaintext
-
+```plaintext
 Marginalia/
 ├── src/
-│   ├── services/          # 核心业务逻辑
-│   │   ├── hitokoto.ts    # API 请求处理
-│   │   └── statusBar.ts   # 状态栏 UI 组件
-│   ├── main.ts            # 插件入口
-│   └── settings.ts        # 设置面板逻辑
-├── esbuild.config.mjs     # 构建配置 (含自动部署逻辑)
-├── .env.example           # 环境变量范例
-└── manifest.json          # 插件清单文件
+│   ├── services/           # Quote services and local quote manager
+│   │   ├── hitokoto.ts     # Hitokoto API (with category support)
+│   │   ├── quotable.ts     # Quotable API (with ZenQuotes fallback)
+│   │   └── quoteManager.ts # Local custom quote parsing + randomization
+│   ├── ui/
+│   │   └── statusBar.ts    # Status bar UI component
+│   ├── main.ts             # Plugin entry point
+│   └── settings.ts         # Settings panel logic
+├── esbuild.config.mjs      # Build configuration (includes auto-deployment logic)
+├── .env.example            # Environment variable example
+└── manifest.json           # Plugin manifest file
 ```
 
-## 📜 许可证
+## 📜 License
 
 MIT License. Copyright (c) 2025 Open Open.
 
-## 🤝 贡献与联系
+## 🤝 Contribution & Contact
 
-欢迎提交 Issue 反馈 Bug，或提交 Pull Request 贡献代码！
+Issues for bug reports and Pull Requests for code contributions are welcome!
 
-- **作者：**Open Open
-- **GitHub：**[OpeNopEn2007](https://github.com/OpeNopEn2007)
+* **Author:** Open Open
+* **GitHub:** [OpeNopEn2007](https://github.com/OpeNopEn2007)
 
----
+## 📅 Changelog
 
-## 📅 更新日志
+**v1.1.0**
+
+* ✨ **New Feature:** Added "Quotable" API as a new data source (with ZenQuotes fallback).
+* ⚙️ **Settings:** Added data source selection (Hitokoto / Quotable / Local Custom List).
+* 🌐 **Locale:** Improved default data source selection based on UI language (Chinese → Hitokoto, others → Quotable).
+* 📝 **Docs:** Updated README network statement and project structure.
 
 **v1.0.0.5**
 
-* 🐛**修复**：修复 `manifest` 文件中的 `main` 字段
+* 🐛 **Fix**: Fixed the `main` field in the `manifest` file.
 
 **v1.0.0.4**
 
-- ✨ **新特性：** 实现了全新的悬浮式气泡提示 (Tooltip)，包含平滑的淡入淡出动画。
-- 🎨**UI 优化：** 将状态栏 Emoji 替换为 Obsidian 原生 Lucide 图标，视觉更统一。
-- 🐛 **修复：** 修复了 Hitokoto API 请求参数格式错误。
-- ⚡ **性能：** 为设置面板的输入框添加了防抖 (Debounce) 处理，避免频繁刷新。
+* ✨ **New Feature:** Implemented a brand new floating Tooltip with smooth fade-in/out animations.
+* 🎨 **UI Optimization:** Replaced status bar Emojis with Obsidian native Lucide icons for a more unified visual style.
+* 🐛 **Fix:** Fixed Hitokoto API request parameter format errors.
+* ⚡ **Performance:** Added Debounce processing to input boxes in the settings panel to avoid frequent refreshing.
 
 **v1.0.0.3**
 
-- 🔧 **工程化：** 重构构建脚本，支持自动分发文件到指定目录。
-- 🌐 **网络：** 优化 URL 参数构建逻辑，符合 RESTful 规范。
+* 🔧 **Engineering:** Refactored build scripts to support automatic file distribution to specified directories.
+* 🌐 **Network:** Optimized URL parameter construction logic to comply with RESTful specifications.
 
 **v1.0.0.2**
 
-- ⚡ **算法优化：** 修复了随机重复逻辑，确保不会连续两次返回同一条格言。
-- 🛡️ **防护机制：** 针对 API 添加额外防护，如果内容重复则自动重试。
-- 🎨 **UI 净化：** 移除了提示信息中的 Emoji，回归纯文字的极简风格。
+* ⚡ **Algorithm Optimization:** Fixed random repetition logic to ensure the same quote is not returned twice in a row.
+* 🛡️ **Protection Mechanism:** Added extra protection for the API; automatically retries if content is repeated.
+* 🎨 **UI Purification:** Removed Emojis from prompt messages, returning to a pure text minimalist style.
 
 **v1.0.0.1**
 
-- 💄 **UI Refinement：** 优化状态栏悬浮提示逻辑，只显示来源属性。
+* 💄 **UI Refinement:** Optimized status bar hover tooltip logic to only display the source attribute.
 
 **v1.0.0.0**
 
-- 🔨 **构建优化：** 修改构建脚本，实现自动化分发文件夹构建流程。
-- 📝 **文档：** 更新作者信息，正式署名为 Open Open。
+* 🔨 **Build Optimization:** Modified build scripts to implement automated folder distribution build flow.
+* 📝 **Documentation:** Updated author information, officially signed as Open Open.
 
 **v1.0.0**
 
-- 🎉 **初始版本发布。**
-- 支持一言 API 和本地自定义列表。
-- 支持自动刷新（1-60分钟）和点击手动刷新。
-- 支持右键复制功能。
-- 支持多种一言分类选择。
+* 🎉 **Initial Release.**
+* Supports Hitokoto API and local custom lists.
+* Supports auto-refresh (1-60 minutes) and manual click refresh.
+* Supports right-click to copy.
+* Supports multiple Hitokoto category selections.

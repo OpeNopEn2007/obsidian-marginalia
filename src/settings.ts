@@ -1,8 +1,9 @@
-import { App, PluginSettingTab, Setting, ToggleComponent, Notice } from 'obsidian';
+import { App, PluginSettingTab, Setting, ToggleComponent, Notice, moment } from 'obsidian';
 import MarginaliaPlugin from './main';
+import { t } from './lang/locale';
 
 export interface MarginaliaSettings {
-  dataSource: 'hitokoto' | 'custom';
+  dataSource: 'hitokoto' | 'quotable' | 'custom';
   hitokotoCategories: string[];
   customQuotes: string;
   refreshInterval: number; // 分钟
@@ -12,9 +13,7 @@ export interface MarginaliaSettings {
 export const DEFAULT_SETTINGS: MarginaliaSettings = {
   dataSource: 'hitokoto',
   hitokotoCategories: ['a', 'b', 'd', 'i', 'k'], // 动画、漫画、文学、诗词、哲学
-  customQuotes: `天天开心！ | 开开
-Live long and prosper!
-要有天才般的自信，以及蠢才般的谦卑 | Open Open`,
+  customQuotes: '',
   refreshInterval: 5,
   autoRefresh: true
 };
@@ -32,19 +31,20 @@ export class MarginaliaSettingTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    new Setting(containerEl).setName('插件设置').setHeading();
+    new Setting(containerEl).setName(t('Plugin Settings')).setHeading();
 
     // 数据源选择
     new Setting(containerEl)
-      .setName('数据源')
-      .setDesc('选择格言的来源')
+      .setName(t('Data Source'))
+      .setDesc(t('Choose the source of quotes'))
       .addDropdown((dropdown) => {
         dropdown
-          .addOption('hitokoto', '一言 API')
-          .addOption('custom', '本地自定义列表')
+          .addOption('hitokoto', t('Hitokoto API'))
+          .addOption('quotable', t('Quotable API'))
+          .addOption('custom', t('Local Custom List'))
           .setValue(this.plugin.settings.dataSource)
           .onChange((value) => {
-            this.plugin.settings.dataSource = value as 'hitokoto' | 'custom';
+            this.plugin.settings.dataSource = value as 'hitokoto' | 'quotable' | 'custom';
             void (async () => {
               await this.plugin.saveSettings();
               await this.plugin.refreshQuote();
@@ -56,8 +56,8 @@ export class MarginaliaSettingTab extends PluginSettingTab {
 
     // 一言分类设置（仅当数据源为一言时显示）
     if (this.plugin.settings.dataSource === 'hitokoto') {
-      new Setting(containerEl).setName('一言分类').setHeading();
-      containerEl.createEl('p', { text: '选择要获取的格言分类：' });
+      new Setting(containerEl).setName(t('Hitokoto Categories')).setHeading();
+      containerEl.createEl('p', { text: t('Select categories to fetch:') });
 
       // 分类列表
       const categoryMap: Record<string, string> = {
@@ -110,10 +110,11 @@ export class MarginaliaSettingTab extends PluginSettingTab {
     // 自定义格言列表（仅当数据源为自定义时显示）
     if (this.plugin.settings.dataSource === 'custom') {
       new Setting(containerEl)
-        .setName('自定义格言列表')
-        .setDesc('一行一条格言，支持格式：内容 | 来源')
+        .setName(t('Custom Quotes List'))
+        .setDesc(t('One quote per line, format: Content | Source'))
         .addTextArea((textarea) => {
           textarea
+            .setPlaceholder(t('Default Custom Quotes'))
             .setValue(this.plugin.settings.customQuotes)
             .onChange((value) => {
               // 清除旧的定时器
@@ -134,8 +135,8 @@ export class MarginaliaSettingTab extends PluginSettingTab {
 
     // 自动刷新设置
     new Setting(containerEl)
-      .setName('自动刷新')
-      .setDesc('是否自动刷新格言')
+      .setName(t('Auto Refresh'))
+      .setDesc(t('Whether to refresh quotes automatically'))
       .addToggle((toggle) => {
         toggle
           .setValue(this.plugin.settings.autoRefresh)
@@ -151,8 +152,8 @@ export class MarginaliaSettingTab extends PluginSettingTab {
     // 刷新间隔设置（仅当自动刷新开启时显示）
     if (this.plugin.settings.autoRefresh) {
       new Setting(containerEl)
-        .setName('刷新间隔')
-        .setDesc('格言自动刷新的时间间隔（分钟）')
+        .setName(t('Refresh Interval'))
+        .setDesc(t('Interval in minutes'))
         .addSlider((slider) => {
           slider
             .setLimits(1, 60, 1)
@@ -170,11 +171,11 @@ export class MarginaliaSettingTab extends PluginSettingTab {
 
     // 手动刷新按钮
     new Setting(containerEl)
-      .setName('手动刷新')
-      .setDesc('立即刷新当前格言')
+      .setName(t('Manual Refresh'))
+      .setDesc(t('Refresh current quote immediately'))
       .addButton((button) => {
         button
-          .setButtonText('刷新')
+          .setButtonText(t('Refresh'))
           .onClick(() => {
             void this.plugin.refreshQuote();
           });
@@ -182,19 +183,24 @@ export class MarginaliaSettingTab extends PluginSettingTab {
 
     // 重置设置按钮
     new Setting(containerEl)
-      .setName('重置设置')
-      .setDesc('恢复默认设置')
+      .setName(t('Reset Settings'))
+      .setDesc(t('Restore default settings'))
       .addButton((button) => {
         button
-          .setButtonText('重置')
+          .setButtonText(t('Reset'))
           .setWarning()
           .onClick(() => {
             void (async () => {
-              this.plugin.settings = Object.assign({}, DEFAULT_SETTINGS);
+              const isZh = moment.locale().startsWith('zh');
+              const dynamicDefaults = Object.assign({}, DEFAULT_SETTINGS, {
+                dataSource: isZh ? 'hitokoto' : 'quotable'
+              });
+              
+              this.plugin.settings = Object.assign({}, dynamicDefaults);
               await this.plugin.saveSettings();
               await this.plugin.refreshQuote();
               this.display();
-              new Notice('设置已重置');
+              new Notice(t('Settings reset'));
             })();
           });
       });

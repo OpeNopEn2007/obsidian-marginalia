@@ -1,4 +1,5 @@
 import { Quote } from './hitokoto';
+import { t } from '../lang/locale';
 
 export class QuoteManager {
   private quotes: Quote[] = [];
@@ -26,12 +27,12 @@ export class QuoteManager {
         if (parts.length >= 2) {
           this.quotes.push({
             content: parts[0],
-            source: parts[1]
+            author: parts[1]
           });
         } else {
           this.quotes.push({
             content: trimmedLine,
-            source: '自定义'
+            author: t('Custom')
           });
         }
       }
@@ -72,8 +73,8 @@ export class QuoteManager {
 
   formatQuotes(): string {
     return this.quotes.map(q => {
-      if (q.source && q.source !== '自定义') {
-        return `${q.content} | ${q.source}`;
+      if (q.author && q.author !== t('Custom')) {
+        return `${q.content} | ${q.author}`;
       }
       return q.content;
     }).join('\n');

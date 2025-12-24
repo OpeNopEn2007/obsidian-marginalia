@@ -10,11 +10,12 @@ export interface HitokotoResponse {
 
 export interface Quote {
   content: string;
-  source: string;
+  author: string;
   type?: string;
 }
 
-import { request } from 'obsidian';
+import { requestUrl } from 'obsidian';
+import { t } from '../lang/locale';
 
 export class HitokotoService {
   private readonly API_URL = 'https://v1.hitokoto.cn/';
@@ -30,24 +31,24 @@ export class HitokotoService {
           });
       }
       
-      const response = await request({
+      const response = await requestUrl({
         url: url.toString(),
         method: 'GET'
       });
 
-      const data: HitokotoResponse = JSON.parse(response);
+      const data = response.json as HitokotoResponse;
       
       return {
         content: data.hitokoto,
-        source: data.from || '未知来源',
+        author: data.from || '未知来源',
         type: data.type
       };
     } catch (error) {
       console.error('Failed to fetch hitokoto:', error);
       // 返回默认值，避免插件崩溃
       return {
-        content: '获取格言失败，请检查网络或设置',
-        source: 'Marginalia',
+        content: t('Fetch Error'),
+        author: 'Marginalia',
         type: 'error'
       };
     }
