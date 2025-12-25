@@ -37,16 +37,90 @@ jobs:
       - name: Build plugin
         run: npm run build
 
+      - name: Select assets to upload
+        id: select_assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ env.VERSION }}
+        run: |
+          set -euo pipefail
+
+          repo="${GITHUB_REPOSITORY}"
+          api="https://api.github.com/repos/${repo}"
+          dir="./marginalia"
+          targets=("main.js" "manifest.json" "styles.css")
+
+          if curl -sSfL \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "${api}/releases/tags/${TAG}" \
+            -o release.json; then
+            found_release=1
+          else
+            found_release=0
+          fi
+
+          files_to_upload=()
+
+          if [[ "$found_release" -eq 0 ]]; then
+            for f in "${targets[@]}"; do
+              files_to_upload+=("${dir}/${f}")
+            done
+          else
+            for f in "${targets[@]}"; do
+              local_path="${dir}/${f}"
+              if [[ ! -f "$local_path" ]]; then
+                echo "Missing build artifact: ${local_path}" >&2
+                exit 1
+              fi
+
+              asset_url=$(node -p "const r=require('./release.json'); const a=(r.assets||[]).find(x=>x.name==='${f}'); a ? a.browser_download_url : ''")
+
+              if [[ -z "$asset_url" ]]; then
+                files_to_upload+=("${local_path}")
+                continue
+              fi
+
+              remote_path="$(mktemp)"
+              curl -sSfL \
+                -H "Authorization: Bearer $GITHUB_TOKEN" \
+                -H "X-GitHub-Api-Version: 2022-11-28" \
+                "$asset_url" \
+                -o "$remote_path"
+
+              local_hash=$(sha256sum "$local_path" | awk '{print $1}')
+              remote_hash=$(sha256sum "$remote_path" | awk '{print $1}')
+              rm -f "$remote_path"
+
+              if [[ "$local_hash" != "$remote_hash" ]]; then
+                files_to_upload+=("${local_path}")
+              fi
+            done
+          fi
+
+          if [[ "${#files_to_upload[@]}" -eq 0 ]]; then
+            echo "files=" >> "$GITHUB_OUTPUT"
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          {
+            echo "files<<EOF"
+            for p in "${files_to_upload[@]}"; do
+              echo "$p"
+            done
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+          echo "has_changes=true" >> "$GITHUB_OUTPUT"
+
       - name: Create or Update Release
+        if: steps.select_assets.outputs.has_changes == 'true'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.VERSION }}
           name: ${{ env.VERSION }}
           draft: false
           prerelease: false
-          files: |
-            ./marginalia/main.js
-            ./marginalia/manifest.json
-            ./marginalia/styles.css
+          files: ${{ steps.select_assets.outputs.files }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
