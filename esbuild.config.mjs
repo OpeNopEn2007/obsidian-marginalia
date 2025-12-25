@@ -3,10 +3,48 @@ import process from 'process';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import fs from 'fs';
-import 'dotenv/config';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+function loadDotEnvFromFile(dotEnvFilePath) {
+  if (!fs.existsSync(dotEnvFilePath)) {
+    return;
+  }
+
+  const contents = fs.readFileSync(dotEnvFilePath, 'utf8');
+  const lines = contents.split(/\r?\n/);
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) {
+      continue;
+    }
+
+    const equalIndex = trimmed.indexOf('=');
+    if (equalIndex === -1) {
+      continue;
+    }
+
+    const key = trimmed.slice(0, equalIndex).trim();
+    if (!key) {
+      continue;
+    }
+
+    let value = trimmed.slice(equalIndex + 1).trim();
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+
+    if (process.env[key] === undefined) {
+      process.env[key] = value;
+    }
+  }
+}
+
+loadDotEnvFromFile(path.join(__dirname, '.env'));
 
 const TEST_VAULT_PATH = process.env.OBSIDIAN_VAULT_PATH || null;
 
@@ -87,22 +125,33 @@ const copyToVaultPlugin = {
   }
 };
 
-esbuild.build({
+const buildOptions = {
   banner: { js: banner },
   entryPoints: [path.join(__dirname, 'src', 'main.ts')],
   bundle: true,
   external: ['obsidian'],
   format: 'cjs',
-  watch: !prod,
   target: 'es2018',
   logLevel: 'info',
   sourcemap: prod ? false : 'inline',
   treeShaking: true,
   outfile: path.join(outputDir, 'main.js'),
   plugins: [copyToVaultPlugin],
-}).then(() => {
+};
+
+async function run() {
+  if (prod) {
+    await esbuild.build(buildOptions);
+    copyFiles();
+    const rootMainJs = path.join(__dirname, 'main.js');
+    if (fs.existsSync(rootMainJs)) fs.unlinkSync(rootMainJs);
+    return;
+  }
+
+  const ctx = await esbuild.context(buildOptions);
+  await ctx.watch();
+  await ctx.rebuild();
   copyFiles();
-  // 清理逻辑...
-  const rootMainJs = path.join(__dirname, 'main.js');
-  if (fs.existsSync(rootMainJs)) fs.unlinkSync(rootMainJs);
-}).catch(() => process.exit(1));
+}
+
+run().catch(() => process.exit(1));

@@ -16,10 +16,16 @@
   "author": "OpeNopEn2007",
   "license": "MIT",
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "@types/node": "^16.0.0",
-    "dotenv": "^17.2.3",
-    "esbuild": "^0.14.0",
-    "obsidian": "^0.14.0",
-    "typescript": "^4.5.0"
+    "@typescript-eslint/eslint-plugin": "^8.50.1",
+    "@typescript-eslint/parser": "^8.50.1",
+    "esbuild": "^0.27.2",
+    "eslint": "^9.39.2",
+    "eslint-plugin-obsidianmd": "^0.1.9",
+    "globals": "^16.5.0",
+    "obsidian": "^1.11.0",
+    "typescript": "^4.5.0",
+    "typescript-eslint": "^8.50.1"
   }
 }

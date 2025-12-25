@@ -3,6 +3,7 @@ import { moment } from 'obsidian';
 const en = {
   // Settings
   "Plugin Settings": "Plugin Settings",
+  "Marginalia": "Marginalia",
   "Data Source": "Data Source",
   "Choose the source of quotes": "Choose the source of quotes",
   "Hitokoto API": "Hitokoto API (Chinese)",
@@ -42,6 +43,7 @@ Stay hungry, stay foolish. | Steve Jobs`,
 const zhCN: typeof en = {
   // Settings
   "Plugin Settings": "插件设置",
+  "Marginalia": "Marginalia",
   "Data Source": "数据源",
   "Choose the source of quotes": "选择格言的来源",
   "Hitokoto API": "一言 API (中文)",

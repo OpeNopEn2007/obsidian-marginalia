@@ -32,3 +32,6 @@ DEV_LOG.md
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Eslint cache
+.eslintcache

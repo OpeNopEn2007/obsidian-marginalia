@@ -20,7 +20,7 @@ export const DEFAULT_SETTINGS: MarginaliaSettings = {
 
 export class MarginaliaSettingTab extends PluginSettingTab {
   private plugin: MarginaliaPlugin;
-  private debounceTimer: NodeJS.Timeout | null = null;
+  private debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor(app: App, plugin: MarginaliaPlugin) {
     super(app, plugin);
@@ -31,7 +31,7 @@ export class MarginaliaSettingTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    new Setting(containerEl).setName(t('Plugin Settings')).setHeading();
+    new Setting(containerEl).setName(t('Marginalia')).setHeading();
 
     // 数据源选择
     new Setting(containerEl)
@@ -76,23 +76,27 @@ export class MarginaliaSettingTab extends PluginSettingTab {
       };
 
       // 按类别分组
-      const categoryGroups = Object.entries(categoryMap).sort(([, a], [, b]) => a.localeCompare(b));
+      const categoryGroups = Object.entries(categoryMap).sort(([, a], [, b]) =>
+        String(a).localeCompare(String(b))
+      );
 
       // 创建分类选择区域
       const categoriesContainer = containerEl.createEl('div', { cls: 'marginalia-categories-container' });
 
       categoryGroups.forEach(([code, name]) => {
+        const categoryCode = String(code);
+        const categoryName = String(name);
         const categoryItem = categoriesContainer.createEl('div', { cls: 'marginalia-category-item' });
         const toggle = new ToggleComponent(categoryItem);
         
-        toggle.setValue(this.plugin.settings.hitokotoCategories.includes(code));
+        toggle.setValue(this.plugin.settings.hitokotoCategories.includes(categoryCode));
         toggle.onChange((value) => {
           if (value) {
-            if (!this.plugin.settings.hitokotoCategories.includes(code)) {
-              this.plugin.settings.hitokotoCategories.push(code);
+            if (!this.plugin.settings.hitokotoCategories.includes(categoryCode)) {
+              this.plugin.settings.hitokotoCategories.push(categoryCode);
             }
           } else {
-            this.plugin.settings.hitokotoCategories = this.plugin.settings.hitokotoCategories.filter(c => c !== code);
+            this.plugin.settings.hitokotoCategories = this.plugin.settings.hitokotoCategories.filter(c => c !== categoryCode);
           }
           void (async () => {
             await this.plugin.saveSettings();
@@ -101,7 +105,7 @@ export class MarginaliaSettingTab extends PluginSettingTab {
         });
 
         categoryItem.createEl('span', { 
-          text: name, 
+          text: categoryName, 
           cls: 'marginalia-category-name' 
         });
       });
@@ -192,11 +196,12 @@ export class MarginaliaSettingTab extends PluginSettingTab {
           .onClick(() => {
             void (async () => {
               const isZh = moment.locale().startsWith('zh');
-              const dynamicDefaults = Object.assign({}, DEFAULT_SETTINGS, {
+              const dynamicDefaults: MarginaliaSettings = {
+                ...DEFAULT_SETTINGS,
                 dataSource: isZh ? 'hitokoto' : 'quotable'
-              });
+              };
               
-              this.plugin.settings = Object.assign({}, dynamicDefaults);
+              this.plugin.settings = { ...dynamicDefaults };
               await this.plugin.saveSettings();
               await this.plugin.refreshQuote();
               this.display();

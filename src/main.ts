@@ -14,26 +14,25 @@ export default class MarginaliaPlugin extends Plugin {
   private statusBarComponent!: StatusBarComponent;
   private refreshTimer: number | null = null;
 
-  async onload(): Promise<void> {
-    // 加载设置
+  onload(): void {
+    void this.initialize();
+  }
+
+  private async initialize(): Promise<void> {
     await this.loadSettings();
 
-    // 初始化服务
     this.hitokotoService = new HitokotoService();
     this.quotableService = new QuotableService();
-    const customQuotes = this.settings.customQuotes?.trim() ? this.settings.customQuotes : t("Default Custom Quotes");
+    const customQuotes = this.settings.customQuotes?.trim()
+      ? this.settings.customQuotes
+      : t("Default Custom Quotes");
     this.quoteManager = new QuoteManager(customQuotes);
 
-    // 创建状态栏组件
     this.statusBarComponent = new StatusBarComponent(this, () => void this.refreshQuote());
 
-    // 注册设置面板
     this.addSettingTab(new MarginaliaSettingTab(this.app, this));
 
-    // 初始加载格言
     void this.refreshQuote();
-
-    // 设置定时刷新
     this.updateRefreshTimer();
   }
 
@@ -50,22 +49,18 @@ export default class MarginaliaPlugin extends Plugin {
   }
 
   async loadSettings() {
-    const loadedData = await this.loadData();
+    const loadedData = (await this.loadData()) as Partial<MarginaliaSettings> | null;
     const isZh = moment.locale().startsWith('zh');
     
     // 智能默认值逻辑：仅当首次安装（无数据或无 dataSource）时执行
-    let defaultSource: 'hitokoto' | 'quotable' = 'quotable'; // 默认英文
-
-    if (isZh) {
-        defaultSource = 'hitokoto';
-    }
+    const defaultSource: 'hitokoto' | 'quotable' = isZh ? 'hitokoto' : 'quotable';
     
     // 构造有效的默认设置
     const effectiveDefaults = Object.assign({}, DEFAULT_SETTINGS, { 
         dataSource: defaultSource
     });
 
-    this.settings = Object.assign({}, effectiveDefaults, loadedData);
+    this.settings = { ...effectiveDefaults, ...(loadedData ?? {}) };
   }
 
   async saveSettings() {
@@ -93,16 +88,10 @@ export default class MarginaliaPlugin extends Plugin {
         quote = await this.quotableService.getRandomQuote();
       } else {
         // 从本地自定义列表获取
-        const randomQuote = this.quoteManager.getRandomQuote();
-        if (randomQuote) {
-          quote = randomQuote;
-        } else {
-          // 如果本地列表为空，显示提示信息
-          quote = {
-            content: t('Please add custom quotes in settings'),
-            author: 'Marginalia'
-          };
-        }
+        quote = this.quoteManager.getRandomQuote() ?? {
+          content: t('Please add custom quotes in settings'),
+          author: 'Marginalia'
+        };
       }
 
       // 更新状态栏显示

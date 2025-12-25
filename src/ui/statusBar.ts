@@ -63,10 +63,8 @@ export class StatusBarComponent {
             return;
         }
 
-        const textToCopy = this.currentQuote.content;
-
         try {
-            await navigator.clipboard.writeText(textToCopy);
+            await navigator.clipboard.writeText(this.currentQuote.content);
 
             // 可以添加一个短暂的提示
             this.showTemporaryMessage(t('Copied to clipboard'));
@@ -78,11 +76,6 @@ export class StatusBarComponent {
     private showTemporaryMessage(message: string): void {
     // 保存当前的文本和提示
     const originalText = this.textEl.textContent || '';
-    const originalTooltip = this.tooltipEl.getText(); // Use getText() instead of accessing property if possible, but setText/getText pair exists? HTMLElement doesn't have getText usually.
-    // textContent is standard.
-    // But for tooltipEl, I used setText above.
-    // I should save the tooltip content.
-    // Since I just set it in updateQuote, I can reconstruct it or just read textContent.
     const originalTooltipText = this.tooltipEl.textContent || '';
     
     // 显示临时消息
