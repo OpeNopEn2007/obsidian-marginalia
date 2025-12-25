@@ -9,7 +9,7 @@ const tsFiles = ["**/*.ts", "**/*.tsx"];
 // This works because the recommended config object exposes rules as own properties
 const obsidianRules = { ...obsidianmd.configs.recommended };
 
-export default tseslint.config(
+export default [
   {
     ignores: ["dist/", "node_modules/", "eslint.config.mjs", "esbuild.config.mjs", "main.js", "marginalia/", "coverage/", "**/*.d.ts", "package.json", "package-lock.json"],
   },
@@ -57,4 +57,4 @@ export default tseslint.config(
       "@typescript-eslint/no-explicit-any": "warn",
     },
   }
-);
+]

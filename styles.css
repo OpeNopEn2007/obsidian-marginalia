@@ -39,6 +39,14 @@
   align-items: center;
   /* 确保图标和文字垂直居中 */
   text-align: center;
+  /* 增加左侧间距，与左边的其他图标分开 */
+  padding-left: 10px;
+}
+
+/* 图标样式 */
+.marginalia-icon {
+  /* 增加图标和文字之间的间距 */
+  margin-right: 6px;
 }
 
 /* 2. 气泡本体：强制脱离文档流 */
