@@ -3,15 +3,20 @@ import tseslint from "typescript-eslint";
 import globals from "globals";
 import obsidianmd from "eslint-plugin-obsidianmd";
 
-const tsFiles = ["**/*.ts", "**/*.tsx"];
-
-// Extract Obsidian-specific rules from the plugin's recommended config
-// This works because the recommended config object exposes rules as own properties
-const obsidianRules = { ...obsidianmd.configs.recommended };
-
-export default [
+export default tseslint.config(
   {
-    ignores: ["dist/", "node_modules/", "eslint.config.mjs", "esbuild.config.mjs", "main.js", "marginalia/", "coverage/", "**/*.d.ts", "package.json", "package-lock.json"],
+    ignores: [
+      "dist/",
+      "node_modules/",
+      "eslint.config.mjs",
+      "esbuild.config.mjs",
+      "main.js",
+      "marginalia/",
+      "coverage/",
+      "**/*.d.ts",
+      "package.json",
+      "package-lock.json"
+    ],
   },
   {
     // Global config
@@ -23,12 +28,10 @@ export default [
     },
   },
   js.configs.recommended,
+  ...tseslint.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
   {
-    files: tsFiles,
-    extends: [
-      ...tseslint.configs.recommended,
-      ...tseslint.configs.recommendedTypeChecked,
-    ],
+    files: ["**/*.ts", "**/*.tsx"],
     plugins: {
       obsidianmd,
     },
@@ -40,7 +43,8 @@ export default [
     },
     rules: {
       // Apply Obsidian rules
-      ...obsidianRules,
+      // Extracting rules from the legacy config object
+      ...obsidianmd.configs.recommended.rules,
 
       // User overrides and strict checks
       "no-unused-vars": "off",
@@ -57,4 +61,4 @@ export default [
       "@typescript-eslint/no-explicit-any": "warn",
     },
   }
-]
+);
