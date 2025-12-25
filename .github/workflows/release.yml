@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Required for creating releases
+      contents: write
 
     steps:
       - name: Checkout code
@@ -23,19 +23,19 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Get Version
+        run: |
+          version=$(node -p "require('./manifest.json').version")
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+
       - name: Run ESLint
         run: npx eslint .
 
+      - name: Clean previous artifacts
+        run: rm -f main.js styles.css manifest.json
+
       - name: Build plugin
         run: npm run build
-
-      - name: Get Version
-        id: version
-        run: |
-          # Read version from manifest.json using jq
-          version=$(jq -r .version manifest.json)
-          echo "Current version: $version"
-          echo "VERSION=$version" >> $GITHUB_ENV
 
       - name: Create or Update Release
         uses: softprops/action-gh-release@v2
